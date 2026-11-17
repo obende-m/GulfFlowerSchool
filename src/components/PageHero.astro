@@ -1,0 +1,87 @@
+---
+import Photo from './Photo.astro';
+import Petal from './Petal.astro';
+import Icon from './Icon.astro';
+import type { Photo as P } from '@/data/photos';
+
+interface Props {
+  eyebrow: string;
+  title: string; // may contain <em>
+  lede?: string;
+  photo?: P;
+  photo2?: P;
+  tone?: 'paper' | 'wine' | 'leaf' | 'sky';
+  crumbs?: { name: string; href: string }[];
+  compact?: boolean;
+}
+const { eyebrow, title, lede, photo, photo2, tone = 'paper', crumbs = [], compact = false } = Astro.props;
+---
+<section class:list={['phero', `phero--${tone}`, compact && 'phero--compact', !photo && 'phero--text']} data-hero aria-labelledby="page-title">
+  <Petal size={300} class="phero__deco" data-spin />
+  <div class="wrap phero__grid">
+    <div class="phero__copy">
+      <nav aria-label="Breadcrumb" class="crumbs" data-hero-item>
+        <ol role="list">
+          <li><a href="/">Home</a></li>
+          {crumbs.map((c, i) => (
+            <li>
+              <Icon name="chev-right" size={14} />
+              {i === crumbs.length - 1 ? <span aria-current="page">{c.name}</span> : <a href={c.href}>{c.name}</a>}
+            </li>
+          ))}
+        </ol>
+      </nav>
+      <span class="eyebrow" data-hero-item>{eyebrow}</span>
+      <h1 id="page-title" class="phero__title" data-split set:html={title} />
+      {lede && <p class="lede" data-hero-item>{lede}</p>}
+      <slot />
+    </div>
+    {photo && (
+      <div class="phero__art">
+        <div class="phero__main" data-hero-img data-depth="-10">
+          <Photo photo={photo} shape="none" ratio="4/3" loading="eager" sizes="(min-width: 1000px) 560px, 92vw" />
+        </div>
+        {photo2 && (
+          <div class="phero__second" data-hero-img data-depth="18">
+            <Photo photo={photo2} shape="none" ratio="1" loading="eager" sizes="220px" />
+          </div>
+        )}
+        <Petal size={74} class="phero__petal" data-hero-pop />
+      </div>
+    )}
+  </div>
+</section>
+
+<style>
+  .phero { position: relative; overflow: hidden; padding-block: clamp(2.5rem, 1.5rem + 3vw, 4.5rem) clamp(4rem, 2.5rem + 4vw, 7rem); }
+  .phero--compact { padding-bottom: clamp(2.5rem, 2rem + 2vw, 4rem); }
+  .phero--wine { background: var(--wine-deep); color: var(--white); }
+  .phero--leaf { background: var(--leaf-deep); color: var(--white); }
+  .phero--sky { background: var(--sky); color: var(--white); }
+  .phero--paper { background: radial-gradient(70% 90% at 100% 0%, var(--sun-soft), transparent 60%), var(--paper); }
+  .phero :global(.phero__deco) { position: absolute; right: -90px; bottom: -110px; color: rgb(242 178 58 / 0.12); --petal-centre: transparent; pointer-events: none; }
+  .phero--paper :global(.phero__deco) { color: rgb(122 27 54 / 0.05); }
+  .phero__grid { position: relative; display: grid; gap: clamp(2.5rem, 2rem + 3vw, 4rem); align-items: center; }
+  @media (min-width: 1000px) { .phero__grid { grid-template-columns: 1.1fr 0.9fr; } .phero--text .phero__grid { grid-template-columns: 1fr; } }
+  .phero__copy { display: grid; gap: 1.35rem; justify-items: start; }
+  .phero__title { font-size: clamp(2.6rem, 1.6rem + 4.2vw, 5.4rem); max-width: 14ch; }
+  .phero--text .phero__title { max-width: 18ch; }
+  .phero--wine .phero__title :global(em), .phero--leaf .phero__title :global(em), .phero--sky .phero__title :global(em) { color: var(--sun); }
+  .phero--paper .phero__title :global(em) { color: var(--wine); }
+  .phero--wine .eyebrow, .phero--leaf .eyebrow, .phero--sky .eyebrow { color: var(--sun); }
+  .phero--wine .lede, .phero--leaf .lede, .phero--sky .lede { color: rgb(255 253 249 / 0.8); }
+
+  .crumbs ol { display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem; font-size: var(--t-sm); font-weight: 600; }
+  .crumbs li { display: inline-flex; align-items: center; gap: 0.35rem; opacity: 0.75; }
+  .crumbs a { display: inline-flex; align-items: center; min-height: 32px; }
+  .crumbs a:hover { text-decoration: underline; text-underline-offset: 3px; }
+  .crumbs [aria-current] { opacity: 1; }
+
+  .phero__art { position: relative; width: min(100%, 560px); justify-self: center; padding: 0 0 8% 0; }
+  .phero__main { overflow: hidden; border-radius: 160px 160px var(--r-lg) var(--r-lg); box-shadow: var(--shadow-lg); }
+  .phero__second { position: absolute; width: 36%; left: -8%; bottom: 0; border-radius: 50%; overflow: hidden; border: 6px solid var(--paper); box-shadow: var(--shadow-md); }
+  .phero--wine .phero__second { border-color: var(--wine-deep); }
+  .phero--leaf .phero__second { border-color: var(--leaf-deep); }
+  .phero--sky .phero__second { border-color: var(--sky); }
+  .phero__art :global(.phero__petal) { position: absolute; right: -14px; top: -20px; color: var(--sun); --petal-centre: var(--brick); }
+</style>

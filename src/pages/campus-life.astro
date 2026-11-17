@@ -1,0 +1,192 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/PageHero.astro';
+import Photo from '@/components/Photo.astro';
+import Petal from '@/components/Petal.astro';
+import Icon from '@/components/Icon.astro';
+import Button from '@/components/Button.astro';
+import CloseCTA from '@/components/CloseCTA.astro';
+import { photos } from '@/data/photos';
+import { facilities, activities, diningRules } from '@/data/content';
+
+const groups = [
+  { title: 'Learning spaces', tone: 'wine', icon: 'flask', items: facilities.slice(0, 8) },
+  { title: 'Care & community', tone: 'leaf', icon: 'shield', items: facilities.slice(8, 12) },
+  { title: 'Play & getting around', tone: 'sun', icon: 'bus', items: facilities.slice(12) },
+] as const;
+---
+<BaseLayout
+  title="Campus Life — Facilities, Boarding & Activities"
+  description="Facilities, boarding, extra-curricular activities, security and school buses at Gulf Flower Schools, Oworonshoki, Lagos."
+  crumbs={[{ name: 'Campus Life', href: '/campus-life/' }]}
+>
+  <PageHero
+    eyebrow="Campus life"
+    title="A home away <em>from home</em>"
+    lede="Laboratories and studios, a boarding house, a sick bay with school nurses, sport and clubs — everything that makes a Gulf Flower day."
+    photo={photos.boardersGroup}
+    photo2={photos.labGroup}
+    tone="leaf"
+    crumbs={[{ name: 'Campus Life', href: '/campus-life/' }]}
+  />
+
+  <section class="section" aria-labelledby="fac-title">
+    <div class="wrap">
+      <div class="sh sh--split">
+        <div class="stack">
+          <span class="eyebrow">Facilities</span>
+          <h2 id="fac-title" data-split>An enviable, <em class="accent--wine">functional</em> infrastructure</h2>
+        </div>
+        <p class="lede" data-reveal>Fifteen facilities across our campuses support learning, wellbeing and everyday life. The primary school adds air-conditioned classrooms and a 45 KVA power generating plant.</p>
+      </div>
+      <div class="fg" data-stagger>
+        {groups.map((g) => (
+          <article class={`fg__card fg__card--${g.tone}`}>
+            <span class="fg__icon"><Icon name={g.icon} size={26} /></span>
+            <h3 class="h4">{g.title}</h3>
+            <ul role="list">{g.items.map((f) => <li>{f}</li>)}</ul>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="mosaic" aria-label="Photographs of the campuses">
+    <div class="mosaic__track" data-parallax="0.08">
+      {[photos.labTitration, photos.primaryCastleSlide, photos.campusWalkway, photos.busesCourtyard, photos.coveredPlayHall].map((p, i) => (
+        <div class={`mosaic__item m${i}`}><Photo photo={p} shape="none" sizes="(min-width: 900px) 30vw, 60vw" reveal /></div>
+      ))}
+    </div>
+  </section>
+
+  <section class="section section--white" id="boarding" aria-labelledby="boarding-title">
+    <div class="wrap board__grid">
+      <div class="board__art">
+        <Photo photo={photos.boardingDormitory} shape="arch" ratio="4/5" sizes="(min-width: 900px) 440px, 85vw" reveal parallax={1} />
+        <Photo photo={photos.boardersGroup} shape="circle" ratio="1" class="board__small" sizes="200px" reveal position="50% 40%" />
+      </div>
+      <div class="stack-lg">
+        <div class="stack">
+          <span class="eyebrow">Boarding</span>
+          <h2 id="boarding-title" data-split>Boarding at primary <em class="accent--leaf">and secondary</em></h2>
+        </div>
+        <div class="prose stack" data-reveal>
+          <p>The school operates a boarding system at both the primary and secondary levels. The boarding house is a home away from home, with every amenity required to make learning conducive.</p>
+          <p>Meals are carefully and nutritionally prepared by a team of professionals, and management pays proper and adequate attention to the welfare and health of boarders.</p>
+        </div>
+        <div class="rules" data-reveal>
+          <h3 class="rules__title"><Icon name="clipboard" size={20} />Dining hall rules</h3>
+          <ol role="list">{diningRules.map((r) => <li>{r}</li>)}</ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--ink" aria-labelledby="act-title">
+    <div class="wrap">
+      <div class="sh sh--split">
+        <div class="stack">
+          <span class="eyebrow">Extra-curricular</span>
+          <h2 id="act-title" data-split>Versatile students for a <em class="accent">dynamic society</em></h2>
+        </div>
+        <p class="lede" data-reveal>Gulf Flower Schools plays host to a wide range of extra-curricular activities, to fortify students for a society that constantly demands versatility.</p>
+      </div>
+      <ul role="list" class="acts2" data-stagger="0.04">
+        {activities.map((a, i) => <li style={`--d:${i}`}><Petal size={20} class="acts2__petal" />{a}</li>)}
+      </ul>
+      <p class="acts2__note" data-reveal>Academic clinics focus mainly on Mathematics, English Language, all science subjects and the key subjects in other disciplines.</p>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="safe-title">
+    <div class="wrap">
+      <div class="sh">
+        <span class="eyebrow">Safety, health &amp; transport</span>
+        <h2 id="safe-title" data-split>Looked after, <em class="accent--brick">all day</em></h2>
+      </div>
+      <div class="safe" data-stagger>
+        <article class="safe__card card">
+          <Photo photo={photos.securityAssembly} shape="none" ratio="16/10" sizes="(min-width: 900px) 400px, 100vw" />
+          <div class="safe__body"><h3 class="h4">Security</h3><p>The school promises maximum security, with uniformed security personnel on site.</p></div>
+        </article>
+        <article class="safe__card card">
+          <Photo photo={photos.busesHighSchool} shape="none" ratio="16/10" sizes="(min-width: 900px) 400px, 100vw" />
+          <div class="safe__body"><h3 class="h4">School buses</h3><p>A fleet of branded Gulf Flower Schools buses; the primary school’s buses are modern and air-conditioned.</p></div>
+        </article>
+        <article class="safe__card card safe__card--text">
+          <span class="safe__icon"><Icon name="shield" size={28} /></span>
+          <div class="safe__body"><h3 class="h4">Sick bay with school nurses</h3><p>There is a sick bay with school nurses on campus, and management pays close attention to the welfare and health of boarders.</p></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--white" aria-labelledby="sch-title">
+    <div class="wrap sch">
+      <div class="stack">
+        <span class="eyebrow">Scholarships</span>
+        <h2 id="sch-title" data-split>Rewarding excellence, <em class="accent--wine">supporting community</em></h2>
+        <p class="lede" data-reveal>As a school committed to corporate social responsibility, Gulf Flower offers scholarships in three categories.</p>
+      </div>
+      <Button href="/admissions/#scholarships" variant="ghost">Scholarship details</Button>
+    </div>
+  </section>
+
+  <CloseCTA />
+</BaseLayout>
+
+<style>
+  .fg { display: grid; gap: 1.25rem; }
+  @media (min-width: 960px) { .fg { grid-template-columns: 1.3fr 1fr 1fr; } }
+  .fg__card { padding: 2rem; border-radius: var(--r-xl); display: grid; gap: 1rem; align-content: start; transition: transform 0.45s var(--ease-out); }
+  .fg__card:hover { transform: translateY(-4px); }
+  .fg__card ul { display: grid; gap: 0.6rem; }
+  .fg__card li { position: relative; padding-left: 1.5rem; }
+  .fg__card li::before { content: ''; position: absolute; left: 0; top: 0.55em; width: 9px; height: 9px; border-radius: 50%; background: currentColor; opacity: 0.55; }
+  .fg__icon { display: grid; place-items: center; width: 54px; height: 54px; border-radius: 16px; background: rgb(255 255 255 / 0.18); }
+  .fg__card--wine { background: var(--wine); color: var(--white); }
+  .fg__card--leaf { background: var(--leaf); color: var(--white); }
+  .fg__card--sun { background: var(--sun); color: var(--ink); }
+  .fg__card--sun .fg__icon { background: rgb(255 255 255 / 0.45); }
+
+  .mosaic { overflow: hidden; padding-bottom: var(--section); }
+  .mosaic__track { display: grid; grid-template-columns: 1.2fr 0.8fr 1fr 0.9fr 1.1fr; gap: 1rem; padding-inline: var(--gutter); align-items: center; width: max(100%, 900px); }
+  .mosaic__item { border-radius: var(--r-lg); overflow: hidden; }
+  .mosaic__item :global(.frame) { height: 100%; }
+  .m0 { aspect-ratio: 4/5; border-radius: 200px 200px var(--r-lg) var(--r-lg); }
+  .m1 { aspect-ratio: 1; }
+  .m2 { aspect-ratio: 3/4; }
+  .m3 { aspect-ratio: 1; border-radius: 50%; }
+  .m4 { aspect-ratio: 4/5; }
+  @media (max-width: 760px) { .mosaic__track { grid-template-columns: repeat(5, 46vw); width: max-content; overflow-x: auto; } .mosaic { overflow-x: auto; scrollbar-width: none; } }
+
+  .board__grid { display: grid; gap: 3.5rem; align-items: center; }
+  @media (min-width: 900px) { .board__grid { grid-template-columns: 0.85fr 1.15fr; gap: 5rem; } }
+  .board__art { position: relative; width: min(100%, 440px); justify-self: center; padding-bottom: 8%; }
+  .board__art :global(.board__small) { position: absolute; width: 40%; right: -8%; bottom: 0; border: 6px solid var(--white); }
+  @media (max-width: 600px) { .board__art :global(.board__small) { right: 0; } }
+  .rules { padding: 1.5rem 1.75rem; border-radius: var(--r-lg); background: var(--sun-soft); }
+  .rules__title { display: flex; align-items: center; gap: 0.6rem; font-family: var(--f-sans); font-size: 1rem; font-weight: 700; margin-bottom: 1rem; }
+  .rules ol { display: grid; gap: 0.6rem; counter-reset: r; }
+  .rules li { counter-increment: r; display: grid; grid-template-columns: 2rem 1fr; color: var(--ink-2); }
+  .rules li::before { content: counter(r); font-family: var(--f-display); font-style: italic; color: var(--brick); font-size: 1.15rem; }
+
+  .acts2 { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+  .acts2 li { display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.9rem 1.4rem; border-radius: var(--r-pill); background: rgb(255 255 255 / 0.06); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.14); font-family: var(--f-display); font-size: clamp(1.3rem, 1.1rem + 0.8vw, 1.8rem); transition: background 0.3s, color 0.3s, transform 0.4s var(--ease-out); }
+  .acts2 li:hover { background: var(--sun); color: var(--ink); transform: translateY(-3px) rotate(-1deg); }
+  .acts2 :global(.acts2__petal) { color: var(--brick); --petal-centre: var(--sun); transition: transform 0.6s var(--ease-out); }
+  .acts2 li:hover :global(.acts2__petal) { transform: rotate(120deg); }
+  .acts2__note { margin-top: 2rem; color: rgb(255 253 249 / 0.7); max-width: 60ch; }
+
+  .safe { display: grid; gap: 1.25rem; }
+  @media (min-width: 900px) { .safe { grid-template-columns: repeat(3, 1fr); } }
+  .safe__card { overflow: hidden; }
+  .safe__card :global(.frame) { border-radius: 0; }
+  .safe__body { display: grid; gap: 0.5rem; padding: 1.5rem; }
+  .safe__body p { color: var(--ink-2); }
+  .safe__card--text { background: var(--leaf-soft); justify-content: flex-end; min-height: 280px; }
+  .safe__icon { margin: 1.5rem 1.5rem auto; display: grid; place-items: center; width: 60px; height: 60px; border-radius: 18px; background: var(--leaf); color: var(--white); }
+
+  .sch { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 2rem; }
+  .sch .stack { max-width: 720px; }
+</style>

@@ -1,0 +1,45 @@
+---
+import Button from './Button.astro';
+import Photo from './Photo.astro';
+import Petal from './Petal.astro';
+import { photos } from '@/data/photos';
+import { phones, formatPhone, telHref } from '@/data/site';
+interface Props { title?: string; text?: string }
+const {
+  title = 'Give your child a place to <em>bloom</em>.',
+  text = 'Tell us about your child and the class you are applying for, and the admissions team will get back to you about the next step.',
+} = Astro.props;
+---
+<section class="close" aria-labelledby="close-title">
+  <div class="wrap close__inner">
+    <div class="close__copy">
+      <span class="eyebrow">Admissions</span>
+      <h2 id="close-title" class="h2" data-split set:html={title} />
+      <p class="lede" data-reveal>{text}</p>
+      <div class="btn-row" data-reveal>
+        <Button href="/admissions/#enquire" variant="sun">Start an enquiry</Button>
+        <Button href={telHref(phones[0])} variant="ghost-light" icon="phone">Call {formatPhone(phones[0])}</Button>
+      </div>
+    </div>
+    <div class="close__art" aria-hidden="true">
+      <Petal size={170} class="close__petal" data-spin />
+      <Photo photo={photos.boardersGroup} shape="arch" ratio="4/5" class="close__photo" sizes="(min-width: 900px) 30vw, 70vw" reveal alt="" position="45% 50%" />
+      <Photo photo={photos.graduate2} shape="circle" ratio="1" class="close__photo2" sizes="180px" reveal alt="" />
+    </div>
+  </div>
+</section>
+<style>
+  .close { position: relative; background: var(--wine); color: var(--white); padding-block: clamp(4.5rem, 3rem + 5vw, 8rem); overflow: hidden; }
+  .close::before { content: ''; position: absolute; right: -20%; bottom: -70%; width: 80vw; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, rgb(196 86 47 / 0.5), transparent 60%); pointer-events: none; }
+  .close__inner { position: relative; display: grid; gap: 3rem; align-items: center; }
+  @media (min-width: 900px) { .close__inner { grid-template-columns: 1.25fr 0.75fr; } }
+  .close__copy { display: grid; gap: 1.5rem; justify-items: start; }
+  .close__copy :global(em) { color: var(--sun); }
+  .close__copy .lede { color: rgb(255 253 249 / 0.8); }
+  .close__copy .eyebrow { color: var(--sun); }
+  .close__art { position: relative; width: min(100%, 360px); justify-self: center; }
+  .close__art :global(.close__photo) { box-shadow: var(--shadow-lg); }
+  .close__art :global(.close__photo2) { position: absolute; width: 42%; left: -16%; bottom: -6%; border: 6px solid var(--wine); }
+  .close__art :global(.close__petal) { position: absolute; right: -50px; top: -46px; color: var(--sun); --petal-centre: var(--brick); z-index: 2; }
+  @media (max-width: 899px) { .close__art { width: min(72%, 300px); margin-top: 1rem; } }
+</style>

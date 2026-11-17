@@ -1,0 +1,125 @@
+---
+import Button from './Button.astro';
+import { forms, phones, formatPhone, telHref, site } from '@/data/site';
+interface Props { variant?: 'admission' | 'contact'; id?: string }
+const { variant = 'admission', id = `form-${variant}` } = Astro.props;
+const fallback = `<a href="${telHref(phones[0])}">${formatPhone(phones[0])}</a> or <a href="mailto:${site.email}">${site.email}</a>.`;
+const levels = [
+  { group: 'Pre-school & Nursery (Gulf Flower One)', items: ['Pre-age (under 2 years)', 'Pre-age (2–3 years)', 'Nursery I', 'Nursery II'] },
+  { group: 'Primary (Gulf Flower One)', items: ['Basic 1', 'Basic 2', 'Basic 3', 'Basic 4', 'Basic 5', 'Basic 6'] },
+  { group: 'High School (Gulf Flower Two)', items: ['JSS1', 'JSS2', 'JSS3', 'SS1', 'SS2', 'SS3'] },
+];
+const f = (n: string) => `${id}-${n}`;
+---
+<form class="form" id={id} data-form data-endpoint={forms.endpoint} data-fallback={fallback} novalidate>
+  {variant === 'admission' ? (
+    <>
+      <input type="hidden" name="_subject" value="Admission enquiry from the Gulf Flower Schools website" />
+      <input type="hidden" name="enquiry_type" value="Admission enquiry" />
+      <div class="form-row form-row--2">
+        <div class="field">
+          <label for={f('parent')}>Parent or guardian’s name <span class="req" aria-hidden="true">*</span></label>
+          <input class="input" id={f('parent')} name="parent_name" autocomplete="name" required data-msg="Please enter your name." aria-describedby={f('parent-err')} />
+          <p class="field-error" id={f('parent-err')} role="alert"></p>
+        </div>
+        <div class="field">
+          <label for={f('child')}>Child’s name <span class="req" aria-hidden="true">*</span></label>
+          <input class="input" id={f('child')} name="child_name" autocomplete="off" required data-msg="Please enter your child’s name." aria-describedby={f('child-err')} />
+          <p class="field-error" id={f('child-err')} role="alert"></p>
+        </div>
+      </div>
+      <div class="form-row form-row--2">
+        <div class="field">
+          <label for={f('email')}>Email address <span class="req" aria-hidden="true">*</span></label>
+          <input class="input" type="email" id={f('email')} name="email" autocomplete="email" inputmode="email" required data-validate="email" data-msg="Please enter your email address." aria-describedby={f('email-err')} />
+          <p class="field-error" id={f('email-err')} role="alert"></p>
+        </div>
+        <div class="field">
+          <label for={f('phone')}>Phone number <span class="req" aria-hidden="true">*</span></label>
+          <input class="input" type="tel" id={f('phone')} name="phone" autocomplete="tel" inputmode="tel" required data-validate="phone" data-msg="Please enter a phone number we can call." aria-describedby={f('phone-err')} />
+          <p class="field-error" id={f('phone-err')} role="alert"></p>
+        </div>
+      </div>
+      <div class="field">
+        <label for={f('level')}>Class applying for <span class="req" aria-hidden="true">*</span></label>
+        <select class="select" id={f('level')} name="class_applying_for" required data-msg="Please choose a class." aria-describedby={f('level-err')}>
+          <option value="">Choose a class</option>
+          {levels.map((g) => <optgroup label={g.group}>{g.items.map((i) => <option>{i}</option>)}</optgroup>)}
+        </select>
+        <p class="field-error" id={f('level-err')} role="alert"></p>
+      </div>
+      <fieldset class="field">
+        <legend>Day or boarding? <span class="req" aria-hidden="true">*</span></legend>
+        <div class="segmented">
+          {['Day', 'Boarding', 'Not sure yet'].map((m) => (
+            <label><input type="radio" name="day_or_boarding" value={m} required data-msg="Please choose day, boarding or not sure yet." /><span>{m}</span></label>
+          ))}
+        </div>
+        <p class="field-error" role="alert"></p>
+      </fieldset>
+      <div class="field">
+        <label for={f('msg')}>Anything we should know? <span class="hint">(optional)</span></label>
+        <textarea class="textarea" id={f('msg')} name="message" rows="4" placeholder="Current school, questions about fees, the entrance examination or boarding…"></textarea>
+      </div>
+    </>
+  ) : (
+    <>
+      <input type="hidden" name="_subject" value="New message from the Gulf Flower Schools website" />
+      <div class="form-row form-row--2">
+        <div class="field">
+          <label for={f('name')}>Your name <span class="req" aria-hidden="true">*</span></label>
+          <input class="input" id={f('name')} name="name" autocomplete="name" required data-msg="Please enter your name." aria-describedby={f('name-err')} />
+          <p class="field-error" id={f('name-err')} role="alert"></p>
+        </div>
+        <div class="field">
+          <label for={f('topic')}>Topic</label>
+          <select class="select" id={f('topic')} name="topic">
+            <option>General enquiry</option>
+            <option>Admissions</option>
+            <option>Visiting the school</option>
+            <option>Boarding</option>
+            <option>Portals and results</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row form-row--2">
+        <div class="field">
+          <label for={f('email')}>Email address <span class="req" aria-hidden="true">*</span></label>
+          <input class="input" type="email" id={f('email')} name="email" autocomplete="email" inputmode="email" required data-validate="email" data-msg="Please enter your email address." aria-describedby={f('email-err')} />
+          <p class="field-error" id={f('email-err')} role="alert"></p>
+        </div>
+        <div class="field">
+          <label for={f('phone')}>Phone number <span class="hint">(optional)</span></label>
+          <input class="input" type="tel" id={f('phone')} name="phone" autocomplete="tel" inputmode="tel" data-validate="phone" aria-describedby={f('phone-err')} />
+          <p class="field-error" id={f('phone-err')} role="alert"></p>
+        </div>
+      </div>
+      <div class="field">
+        <label for={f('msg')}>Message <span class="req" aria-hidden="true">*</span></label>
+        <textarea class="textarea" id={f('msg')} name="message" rows="5" required data-validate="min" data-min="10" data-msg="Please write your message." aria-describedby={f('msg-err')}></textarea>
+        <p class="field-error" id={f('msg-err')} role="alert"></p>
+      </div>
+    </>
+  )}
+
+  <input type="hidden" name="_template" value="table" />
+  <input type="hidden" name="_captcha" value="false" />
+  <div class="hp" aria-hidden="true">
+    <label>Leave this empty <input type="text" name="_honey" tabindex="-1" autocomplete="off" /></label>
+  </div>
+
+  <div class="form-foot">
+    <Button type="submit" variant={variant === 'admission' ? 'wine' : 'wine'}>{variant === 'admission' ? 'Send admission enquiry' : 'Send message'}</Button>
+    <p class="hint form-note">Your details are sent to the school by email and used only to reply to you.</p>
+  </div>
+  <div class="form-status" data-status role="status" aria-live="polite" tabindex="-1"></div>
+</form>
+<style>
+  .form-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.25rem; margin-top: 0.25rem; }
+  .form-note { font-size: var(--t-xs); color: var(--ink-3); max-width: 34ch; }
+  .form :global(.form-status a) { text-decoration: underline; font-weight: 700; }
+  fieldset.field { border: 0; padding: 0; min-width: 0; }
+  fieldset.field legend { margin-bottom: 0.45rem; }
+  @media (max-width: 560px) { .form-foot :global(.btn) { width: 100%; } }
+</style>

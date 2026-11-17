@@ -1,0 +1,35 @@
+---
+import Petal from '../Petal.astro';
+import { activities } from '@/data/content';
+const half = Math.ceil(activities.length / 2);
+const rows = [activities.slice(0, half), activities.slice(half)];
+---
+<section class="acts" aria-labelledby="acts-title">
+  <div class="wrap acts__head">
+    <span class="eyebrow">Beyond the classroom</span>
+    <h2 id="acts-title" class="acts__title" data-split>Clubs, sport &amp; culture that keep pupils <em class="accent--sun">physically, socially and mentally alert</em></h2>
+  </div>
+  {rows.map((row, r) => (
+    <div class:list={['marquee', r === 1 && 'marquee--reverse']} style={`--dur:${r ? 48 : 40}s`}>
+      {[0, 1].map((copy) => (
+        <ul role="list" class="marquee__track" aria-hidden={copy === 1 ? 'true' : undefined}>
+          {row.map((a, i) => (
+            <li class:list={['acts__item', (i + r) % 2 && 'acts__item--italic']}>
+              {a}<Petal size={34} class="acts__petal" />
+            </li>
+          ))}
+        </ul>
+      ))}
+    </div>
+  ))}
+</section>
+<style>
+  .acts { background: var(--ink); color: var(--white); padding-block: clamp(4.5rem, 3rem + 4vw, 7.5rem); overflow: hidden; display: grid; gap: clamp(0.5rem, 1vw, 1rem); }
+  .acts__head { display: grid; gap: 1rem; margin-bottom: clamp(2rem, 1rem + 2vw, 3.5rem); }
+  .acts__head .eyebrow { color: var(--sun); }
+  .acts__title { font-size: clamp(1.9rem, 1.3rem + 2.2vw, 3.2rem); max-width: 24ch; line-height: 1.08; }
+  .acts__item { display: inline-flex; align-items: center; gap: 2.5rem; font-family: var(--f-display); font-size: clamp(2.6rem, 1.6rem + 4.5vw, 6rem); line-height: 1.1; letter-spacing: -0.03em; white-space: nowrap; transition: color 0.3s; }
+  .acts__item--italic { font-style: italic; font-weight: 350; color: var(--sun); }
+  .acts__item:hover { color: var(--brick); }
+  .acts__item :global(.acts__petal) { color: var(--brick); --petal-centre: var(--sun); flex: none; }
+</style>

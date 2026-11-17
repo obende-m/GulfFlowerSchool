@@ -1,0 +1,111 @@
+---
+import { site, phones, formatPhone, telHref, campuses, mapsLink, social, portals } from '@/data/site';
+import Brand from './Brand.astro';
+import Icon from './Icon.astro';
+import Petal from './Petal.astro';
+const year = new Date().getFullYear();
+---
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__top">
+      <div class="footer__intro">
+        <Brand tone="light" />
+        <p class="footer__vision">
+          <span class="eyebrow">Our vision</span>
+          <span class="footer__quote">“{site.vision}”</span>
+        </p>
+      </div>
+
+      <nav class="footer__col" aria-label="Explore">
+        <h2 class="footer__h">Explore</h2>
+        <ul role="list">
+          <li><a href="/about/">Our story</a></li>
+          <li><a href="/leadership/">Leadership</a></li>
+          <li><a href="/campus-life/">Campus life</a></li>
+          <li><a href="/gallery/">Gallery</a></li>
+          <li><a href="/admissions/">Admissions</a></li>
+          <li><a href="/admissions/#faq">FAQs</a></li>
+        </ul>
+      </nav>
+
+      <nav class="footer__col" aria-label="Schools and portals">
+        <h2 class="footer__h">Schools</h2>
+        <ul role="list">
+          <li><a href="/schools/nursery-primary/">Nursery &amp; Primary</a></li>
+          <li><a href="/schools/high-school/">High School</a></li>
+        </ul>
+        <h2 class="footer__h footer__h--gap">Portals</h2>
+        <ul role="list">
+          {portals.map((p) => (
+            <li>
+              <a href={p.url} target="_blank" rel="noopener">{p.name}<Icon name="arrow-up-right" size={14} /><span class="sr-only">(opens in a new tab)</span></a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <div class="footer__col footer__contact">
+        <h2 class="footer__h">Visit &amp; call</h2>
+        {campuses.map((c) => (
+          <a class="campus-line" href={mapsLink(c.mapQuery)} target="_blank" rel="noopener">
+            <strong>{c.name} · {c.school}</strong>
+            <span>{c.street}, {c.area}</span>
+          </a>
+        ))}
+        <ul role="list" class="phones">
+          {phones.map((p) => <li><a href={telHref(p)}>{formatPhone(p)}</a></li>)}
+        </ul>
+        <a class="mail" href={`mailto:${site.email}`}><Icon name="mail" size={16} />{site.email}</a>
+        <p class="social">
+          {social.map((s) => (s.url ? <a href={s.url} target="_blank" rel="noopener">{s.name}</a> : <span>{s.name}</span>))}
+          <span class="social__handle">{social[0].handle}</span>
+        </p>
+      </div>
+    </div>
+
+    <div class="footer__mark" aria-hidden="true">
+      <span>Gulf</span>
+      <Petal size="1em" class="footer__petal" />
+      <span>Flower</span>
+    </div>
+
+    <div class="footer__bottom">
+      <p>© {year} {site.name}. All rights reserved.</p>
+      <p>{site.locality}, {site.lga}, {site.region}, {site.country}</p>
+      <a href="#top" class="to-top">Back to top <Icon name="arrow" size={14} class="to-top__icon" /></a>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer { position: relative; background: var(--wine-deep); color: rgb(255 253 249 / 0.82); padding-top: clamp(4rem, 3rem + 4vw, 6.5rem); overflow: hidden; }
+  .footer__top { display: grid; gap: 2.75rem; grid-template-columns: 1fr; }
+  @media (min-width: 720px) { .footer__top { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 1100px) { .footer__top { grid-template-columns: 1.3fr 0.75fr 0.85fr 1.4fr; gap: 3rem; } }
+  .footer__vision { margin-top: 1.75rem; display: grid; gap: 0.75rem; max-width: 30ch; }
+  .footer__quote { font-family: var(--f-display); font-style: italic; font-size: 1.6rem; line-height: 1.2; color: var(--white); }
+  .footer__h { font-family: var(--f-sans); font-size: var(--t-xs); font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--sun); margin-bottom: 1rem; }
+  .footer__h--gap { margin-top: 2rem; }
+  .footer__col ul { display: grid; gap: 0.1rem; }
+  .footer__col a { display: inline-flex; align-items: center; gap: 0.35rem; min-height: 44px; transition: color 0.2s, transform 0.3s var(--ease-out); }
+  .footer__col a:hover { color: var(--white); transform: translateX(3px); }
+  .footer__col a.campus-line { display: grid; gap: 0.15rem; margin-bottom: 0.9rem; min-height: 0; }
+  .campus-line strong { color: var(--white); font-weight: 650; }
+  .campus-line span { font-size: var(--t-sm); }
+  .footer__col ul.phones { display: flex; flex-wrap: wrap; gap: 0 1.1rem; margin: 0.4rem 0 0.25rem; font-variant-numeric: tabular-nums; }
+  .mail { word-break: break-all; }
+  .social { display: flex; flex-wrap: wrap; gap: 0.35rem 0.9rem; margin-top: 0.6rem; font-size: var(--t-sm); }
+  .social__handle { color: var(--sun); font-weight: 600; }
+  .footer__mark {
+    display: flex; align-items: center; justify-content: center; gap: 0.12em;
+    font-family: var(--f-display); font-size: clamp(4rem, 1rem + 15vw, 15.5rem); line-height: 0.9; letter-spacing: -0.05em;
+    color: rgb(255 253 249 / 0.07); margin-top: clamp(3rem, 2rem + 4vw, 5rem); white-space: nowrap; user-select: none;
+  }
+  .footer__mark span:last-child { font-style: italic; font-weight: 400; }
+  .footer__mark :global(.footer__petal) { color: var(--sun); --petal-centre: var(--wine-deep); opacity: 0.9; width: 0.7em; height: 0.7em; animation: spin 24s linear infinite; }
+  .footer__bottom { display: flex; flex-wrap: wrap; gap: 0.75rem 2rem; justify-content: space-between; align-items: center; padding-block: 1.5rem 6rem; border-top: 1px solid rgb(255 255 255 / 0.12); font-size: var(--t-sm); }
+  @media (min-width: 720px) { .footer__bottom { padding-bottom: 2rem; } }
+  .to-top { display: inline-flex; align-items: center; gap: 0.4rem; min-height: 44px; font-weight: 650; color: var(--sun); }
+  .to-top :global(.to-top__icon) { transform: rotate(-90deg); transition: transform 0.35s var(--ease-out); }
+  .to-top:hover :global(.to-top__icon) { transform: rotate(-90deg) translateX(4px); }
+</style>

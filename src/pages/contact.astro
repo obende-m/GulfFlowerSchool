@@ -1,0 +1,129 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/PageHero.astro';
+import EnquiryForm from '@/components/EnquiryForm.astro';
+import Photo from '@/components/Photo.astro';
+import Icon from '@/components/Icon.astro';
+import Button from '@/components/Button.astro';
+import { photos } from '@/data/photos';
+import { site, phones, formatPhone, telHref, campuses, mapsLink, mapEmbed, social, whatsapp } from '@/data/site';
+---
+<BaseLayout
+  title="Contact Us — Phone, Email & Campus Addresses"
+  description="Contact Gulf Flower Schools: call 0812 299 8550, email gulfflowersignatures@gmail.com, or visit our campuses at 6 Atanda Alonge Street and 1 Gulf Flower Close, Oworonshoki, Lagos."
+  crumbs={[{ name: 'Contact', href: '/contact/' }]}
+>
+  <PageHero
+    eyebrow="Contact"
+    title="We’d love to <em>hear from you</em>"
+    lede="Call, email or send a message. Our two campuses sit by Miyaki Junction in Oworonshoki, Kosofe LGA, Lagos."
+    tone="wine"
+    compact
+    crumbs={[{ name: 'Contact', href: '/contact/' }]}
+  >
+    <div class="quick" data-hero-item>
+      <a href={telHref(phones[0])} class="quick__item"><span class="quick__icon"><Icon name="phone" size={22} /></span><span><small>Call the school</small>{formatPhone(phones[0])}</span></a>
+      <a href={`mailto:${site.email}`} class="quick__item"><span class="quick__icon"><Icon name="mail" size={22} /></span><span><small>Email</small>{site.email}</span></a>
+      {whatsapp && <a href={`https://wa.me/${whatsapp}`} class="quick__item" target="_blank" rel="noopener"><span class="quick__icon"><Icon name="whatsapp" size={22} /></span><span><small>WhatsApp</small>Chat with us</span></a>}
+    </div>
+  </PageHero>
+
+  <section class="section" aria-labelledby="camp-title">
+    <div class="wrap">
+      <h2 id="camp-title" class="sr-only">Our campuses</h2>
+      <div class="camps" data-stagger>
+        {campuses.map((c, i) => (
+          <article class="camp">
+            <Photo photo={i === 0 ? photos.primaryMuralWall : photos.highSchoolArch} shape="none" ratio="16/9" sizes="(min-width: 900px) 600px, 100vw" />
+            <div class="camp__body">
+              <p class="camp__kicker">{c.name}</p>
+              <h3 class="h3">{c.school}</h3>
+              <p class="camp__addr"><Icon name="pin" size={18} /><span>{c.street},<br />{c.area}</span></p>
+              <div class="btn-row">
+                <Button href={mapsLink(c.mapQuery)} size="sm" external icon="arrow-up-right">Get directions</Button>
+                <Button href={c.href} variant="ghost" size="sm">About this school</Button>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--white" aria-labelledby="msg-title">
+    <div class="wrap msg__grid">
+      <div class="msg__side">
+        <span class="eyebrow">Send a message</span>
+        <h2 id="msg-title" data-split>Ask us <em class="accent--wine">anything</em></h2>
+        <p class="lede" data-reveal>For admissions, please use the <a class="link" href="/admissions/#enquire">admission enquiry form</a> so we know which class you are applying for.</p>
+
+        <div class="lines" data-reveal>
+          <h3 class="lines__title">Telephone</h3>
+          <ul role="list" class="lines__list">
+            {phones.map((p) => <li><a href={telHref(p)}><Icon name="phone" size={16} />{formatPhone(p)}</a></li>)}
+          </ul>
+          <h3 class="lines__title">Email</h3>
+          <p><a class="link" href={`mailto:${site.email}`}>{site.email}</a></p>
+          <h3 class="lines__title">Social media</h3>
+          <ul role="list" class="lines__social">
+            {social.map((s) => <li>{s.url ? <a href={s.url} class="link" target="_blank" rel="noopener">{s.name}</a> : <span>{s.name}</span>} <span class="muted">{s.handle}</span></li>)}
+          </ul>
+          <h3 class="lines__title">Parents &amp; students</h3>
+          <p><a class="link" href="/portals/">School portals and results <Icon name="arrow" /></a></p>
+        </div>
+      </div>
+      <div class="msg__form" data-reveal>
+        <EnquiryForm variant="contact" />
+      </div>
+    </div>
+  </section>
+
+  <section class="map" aria-labelledby="map-title">
+    <div class="wrap">
+      <div class="map__head">
+        <h2 id="map-title" class="h3">Find Gulf Flower on the map</h2>
+        <a class="link" href={mapsLink(campuses[1].mapQuery)} target="_blank" rel="noopener">Open in Google Maps <Icon name="arrow-up-right" /></a>
+      </div>
+      <div class="map__frame" data-reveal>
+        <iframe src={mapEmbed} title="Map showing Gulf Flower International School, Oworonshoki, Lagos" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .quick { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 0.5rem; }
+  .quick__item { display: flex; align-items: center; gap: 0.85rem; padding: 0.6rem 1.25rem 0.6rem 0.6rem; border-radius: var(--r-pill); background: rgb(255 255 255 / 0.08); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.16); transition: background 0.3s, transform 0.4s var(--ease-out); font-weight: 650; word-break: break-word; }
+  .quick__item:hover { background: rgb(255 255 255 / 0.16); transform: translateY(-2px); }
+  .quick__item small { display: block; font-size: var(--t-xs); opacity: 0.7; font-weight: 600; }
+  .quick__icon { display: grid; place-items: center; width: 48px; height: 48px; flex: none; border-radius: 50%; background: var(--sun); color: var(--ink); }
+
+  .camps { display: grid; gap: 1.25rem; }
+  @media (min-width: 900px) { .camps { grid-template-columns: 1fr 1fr; gap: 1.5rem; } }
+  .camp { overflow: hidden; border-radius: var(--r-xl); background: var(--white); box-shadow: inset 0 0 0 1px var(--line); transition: transform 0.5s var(--ease-out), box-shadow 0.5s; }
+  .camp:hover { transform: translateY(-4px); box-shadow: inset 0 0 0 1px var(--line), var(--shadow-md); }
+  .camp :global(.frame) { border-radius: 0; }
+  .camp:hover :global(img) { transform: scale(1.04); }
+  .camp__body { display: grid; gap: 0.9rem; padding: clamp(1.5rem, 1rem + 2vw, 2.25rem); }
+  .camp__kicker { font-size: var(--t-xs); font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--brick); }
+  .camp__addr { display: flex; gap: 0.6rem; color: var(--ink-2); }
+  .camp__addr :global(svg) { flex: none; margin-top: 3px; color: var(--wine); }
+
+  .msg__grid { display: grid; gap: 3rem; align-items: start; }
+  @media (min-width: 1000px) { .msg__grid { grid-template-columns: 0.85fr 1.15fr; gap: 4.5rem; } }
+  .msg__side { display: grid; gap: 1.4rem; }
+  .lines { display: grid; gap: 0.5rem; }
+  .lines__title { font-family: var(--f-sans); font-size: var(--t-xs); font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); margin-top: 1rem; }
+  .lines__list { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .lines__list a { display: inline-flex; align-items: center; gap: 0.45rem; min-height: 44px; padding: 0.4rem 0.9rem; border-radius: var(--r-pill); background: var(--paper); font-weight: 650; font-variant-numeric: tabular-nums; transition: background 0.3s, color 0.3s; }
+  .lines__list a:hover { background: var(--wine); color: var(--white); }
+  .lines__social { display: grid; gap: 0.3rem; }
+  .lines p .link { word-break: break-all; }
+  .msg__form { padding: clamp(1.5rem, 1rem + 2.5vw, 3rem); border-radius: var(--r-xl); background: var(--paper); box-shadow: inset 0 0 0 1px var(--line); }
+
+  .map { padding-bottom: var(--section); background: var(--white); }
+  .map__head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 1rem; margin-bottom: 1.25rem; }
+  .map__frame { border-radius: var(--r-xl); overflow: hidden; box-shadow: inset 0 0 0 1px var(--line), var(--shadow-md); height: 380px; background: var(--paper-2); }
+  @media (min-width: 900px) { .map__frame { height: auto; aspect-ratio: 16 / 7; } }
+  .map__frame iframe { width: 100%; height: 100%; border: 0; }
+</style>

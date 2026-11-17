@@ -1,0 +1,54 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/PageHero.astro';
+import Icon from '@/components/Icon.astro';
+import Petal from '@/components/Petal.astro';
+import { portals, phones, formatPhone, telHref } from '@/data/site';
+---
+<BaseLayout
+  title="School Portals — Students & Parents"
+  description="Links to the Gulf Flower Schools portals: the high school and primary school portals (Abacus Bells) and DatPortal for secondary exams and results."
+  crumbs={[{ name: 'Portals', href: '/portals/' }]}
+>
+  <PageHero
+    eyebrow="For students & parents"
+    title="School <em>portals</em>"
+    lede="Gulf Flower uses three online portals, run by outside providers. Each link opens the provider’s site in a new tab; sign in with the details the school has given you."
+    tone="sky"
+    compact
+    crumbs={[{ name: 'Portals', href: '/portals/' }]}
+  />
+  <section class="section">
+    <div class="wrap">
+      <ul role="list" class="portals" data-stagger>
+        {portals.map((p, i) => (
+          <li>
+            <a href={p.url} target="_blank" rel="noopener" class={`portal portal--${i}`}>
+              <Petal size={48} class="portal__petal" />
+              <span class="portal__provider">{p.provider}</span>
+              <h2 class="portal__name">{p.name}</h2>
+              <p>{p.for}</p>
+              <span class="portal__go">Open portal <Icon name="arrow-up-right" size={18} /><span class="sr-only">(opens in a new tab)</span></span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <p class="help" data-reveal>Questions about portal access? Call <a class="link" href={telHref(phones[0])}>{formatPhone(phones[0])}</a> or <a class="link" href="/contact/">send a message</a>.</p>
+    </div>
+  </section>
+</BaseLayout>
+<style>
+  .portals { display: grid; gap: 1.25rem; }
+  @media (min-width: 900px) { .portals { grid-template-columns: repeat(3, 1fr); } }
+  .portal { position: relative; display: grid; gap: 0.75rem; align-content: start; height: 100%; min-height: 300px; padding: 2rem; border-radius: var(--r-xl); background: var(--white); box-shadow: inset 0 0 0 1px var(--line); transition: transform 0.5s var(--ease-out), box-shadow 0.5s; }
+  .portal:hover { transform: translateY(-6px); box-shadow: inset 0 0 0 1px var(--line), var(--shadow-lg); }
+  .portal :global(.portal__petal) { color: var(--sun); --petal-centre: var(--wine); transition: transform 0.9s var(--ease-out); }
+  .portal--1 :global(.portal__petal) { color: var(--leaf); --petal-centre: var(--sun); }
+  .portal--2 :global(.portal__petal) { color: var(--sky); --petal-centre: var(--sun); }
+  .portal:hover :global(.portal__petal) { transform: rotate(120deg); }
+  .portal__provider { font-size: var(--t-xs); font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); }
+  .portal__name { font-size: clamp(1.8rem, 1.4rem + 1vw, 2.3rem); }
+  .portal p { color: var(--ink-2); }
+  .portal__go { margin-top: auto; display: inline-flex; align-items: center; gap: 0.4rem; font-weight: 700; color: var(--wine); padding-top: 1rem; }
+  .help { margin-top: 2.5rem; color: var(--ink-2); }
+</style>

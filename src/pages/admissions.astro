@@ -1,0 +1,159 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/PageHero.astro';
+import AdmissionRoutes from '@/components/AdmissionRoutes.astro';
+import EnquiryForm from '@/components/EnquiryForm.astro';
+import Icon from '@/components/Icon.astro';
+import Petal from '@/components/Petal.astro';
+import Button from '@/components/Button.astro';
+import { photos } from '@/data/photos';
+import { faqs, scholarships } from '@/data/content';
+import { phones, formatPhone, telHref, site, campuses, mapsLink } from '@/data/site';
+
+const faqSchema = {
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+};
+---
+<BaseLayout
+  title="Admissions — How to Apply"
+  description="How to apply to Gulf Flower Schools, Oworonshoki: placement test for nursery and primary, entrance examination and interview for JSS1, screening for other classes. Send an admission enquiry."
+  crumbs={[{ name: 'Admissions', href: '/admissions/' }]}
+  schema={[faqSchema]}
+>
+  <PageHero
+    eyebrow={site.admissionNotice}
+    title="Admissions, <em>made simple</em>"
+    lede="Whether your child is starting Pre-age or moving into secondary school, here is how admission works — and how to start an enquiry today."
+    photo={photos.securityAssembly}
+    photo2={photos.graduate5}
+    crumbs={[{ name: 'Admissions', href: '/admissions/' }]}
+  >
+    <div class="btn-row" data-hero-item>
+      <Button href="#enquire">Start an enquiry</Button>
+      <Button href="#faq" variant="ghost">Read the FAQs</Button>
+    </div>
+  </PageHero>
+
+  <section class="section section--white" aria-labelledby="routes-title">
+    <div class="wrap routes__grid">
+      <div class="stack-lg">
+        <div class="stack">
+          <span class="eyebrow">Admission routes</span>
+          <h2 id="routes-title" data-split>Three ways <em class="accent--brick">in</em></h2>
+        </div>
+        <p class="lede" data-reveal>Choose the route that matches your child’s class. Not sure which class? Try the <a class="link" href="/schools/#guide-title">age guide</a>.</p>
+        <aside class="know" data-reveal>
+          <h3 class="know__title"><Icon name="book" size={20} />Good to know</h3>
+          <ul role="list" class="tick-list">
+            <li>All placement tests are conducted in English.</li>
+            <li>Day and boarding places are offered at primary and secondary level.</li>
+            <li>Uniform and sportswear are available for purchase in school.</li>
+          </ul>
+        </aside>
+      </div>
+      <div data-reveal><AdmissionRoutes idPrefix="adm-route" /></div>
+    </div>
+  </section>
+
+  <section class="section" id="scholarships" aria-labelledby="sch-title">
+    <div class="wrap">
+      <div class="sh sh--split">
+        <div class="stack">
+          <span class="eyebrow">Scholarships</span>
+          <h2 id="sch-title" data-split>Three scholarship <em class="accent--wine">opportunities</em></h2>
+        </div>
+        <p class="lede" data-reveal>As a school committed to corporate social responsibility, Gulf Flower Schools offers scholarships in the following categories.</p>
+      </div>
+      <ol role="list" class="sch" data-stagger>
+        {scholarships.map((s, i) => (
+          <li class={`sch__card sch__card--${i}`}>
+            <Petal size={56} class="sch__petal" />
+            <span class="sch__n">0{i + 1}</span>
+            <h3 class="sch__t">{s.title}</h3>
+            <p>{s.detail}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section section--paper2 enquire" id="enquire" aria-labelledby="enq-title">
+    <div class="wrap enq__grid">
+      <div class="enq__side">
+        <span class="eyebrow">Admission enquiry</span>
+        <h2 id="enq-title" data-split>Tell us about <em class="accent--leaf">your child</em></h2>
+        <p class="lede" data-reveal>Send your details and the class you are applying for. Ask about fees, the next placement test or entrance examination, and boarding, so the school can reply by phone or email.</p>
+        <div class="fees" data-reveal>
+          <h3 class="h4">About fees</h3>
+          <p>School fees are not published online. Ask for the current fees in your enquiry, or call the school.</p>
+        </div>
+        <ul role="list" class="enq__contacts" data-reveal>
+          <li><a href={telHref(phones[0])}><span class="ci"><Icon name="phone" size={18} /></span><span><small>Call</small>{formatPhone(phones[0])}</span></a></li>
+          <li><a href={telHref(phones[1])}><span class="ci"><Icon name="phone" size={18} /></span><span><small>Or</small>{formatPhone(phones[1])}</span></a></li>
+          <li><a href={`mailto:${site.email}`}><span class="ci"><Icon name="mail" size={18} /></span><span><small>Email</small>{site.email}</span></a></li>
+          {campuses.map((c) => (
+            <li><a href={mapsLink(c.mapQuery)} target="_blank" rel="noopener"><span class="ci"><Icon name="pin" size={18} /></span><span><small>{c.name}</small>{c.street}</span></a></li>
+          ))}
+        </ul>
+      </div>
+      <div class="enq__form" data-reveal>
+        <EnquiryForm variant="admission" />
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--white" id="faq" aria-labelledby="faq-title">
+    <div class="wrap faq__grid">
+      <div class="stack">
+        <span class="eyebrow">FAQs</span>
+        <h2 id="faq-title" data-split>Questions parents <em class="accent--wine">often ask</em></h2>
+        <p class="lede" data-reveal>Can’t find your answer? <a href="/contact/" class="link">Contact the school</a>.</p>
+      </div>
+      <div class="accordion" data-stagger="0.05">
+        {faqs.map((f, i) => (
+          <details class="acc" name="faq" open={i === 0}>
+            <summary>{f.q}<span class="plus" aria-hidden="true"></span></summary>
+            <div class="acc-body"><p>{f.a}</p></div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .routes__grid { display: grid; gap: 3rem; align-items: start; }
+  .routes__grid > * { min-width: 0; }
+  @media (min-width: 960px) { .routes__grid { grid-template-columns: 0.8fr 1.2fr; gap: 5rem; } }
+  .know { padding: 1.5rem; border-radius: var(--r-lg); background: var(--leaf-soft); }
+  .know__title { display: flex; align-items: center; gap: 0.5rem; font-family: var(--f-sans); font-size: 1rem; font-weight: 700; margin-bottom: 1rem; color: var(--leaf-deep); }
+
+  .sch { display: grid; gap: 1.25rem; }
+  @media (min-width: 900px) { .sch { grid-template-columns: repeat(3, 1fr); } }
+  .sch__card { position: relative; overflow: hidden; display: grid; gap: 0.6rem; align-content: end; min-height: 300px; padding: 2rem; border-radius: var(--r-xl); transition: transform 0.5s var(--ease-out); }
+  .sch__card:hover { transform: translateY(-6px); }
+  .sch__card--0 { background: var(--sky); color: var(--white); }
+  .sch__card--1 { background: var(--wine); color: var(--white); }
+  .sch__card--2 { background: var(--sun); color: var(--ink); }
+  .sch__card :global(.sch__petal) { position: absolute; top: 1.5rem; right: 1.5rem; color: rgb(255 255 255 / 0.85); --petal-centre: var(--brick); transition: transform 1s var(--ease-out); }
+  .sch__card:hover :global(.sch__petal) { transform: rotate(180deg) scale(1.15); }
+  .sch__n { font-family: var(--f-display); font-style: italic; font-size: 1.2rem; opacity: 0.7; }
+  .sch__t { font-size: clamp(1.8rem, 1.4rem + 1.2vw, 2.4rem); }
+
+  .enq__grid { display: grid; gap: 3rem; align-items: start; }
+  @media (min-width: 1000px) { .enq__grid { grid-template-columns: 0.85fr 1.15fr; gap: 4.5rem; } .enq__side { position: sticky; top: calc(var(--header-h) + 2rem); } }
+  .enq__side { display: grid; gap: 1.4rem; }
+  .fees { padding: 1.25rem 1.5rem; border-radius: var(--r-md); background: var(--sun-soft); display: grid; gap: 0.35rem; }
+  .fees p { color: var(--ink-2); font-size: var(--t-sm); }
+  .enq__contacts { display: grid; gap: 0.4rem; }
+  .enq__contacts a { display: flex; align-items: center; gap: 0.9rem; padding: 0.5rem; border-radius: var(--r-md); transition: background 0.3s; min-height: 56px; word-break: break-word; }
+  .enq__contacts a:hover { background: var(--white); }
+  .enq__contacts small { display: block; font-size: var(--t-xs); color: var(--ink-3); font-weight: 600; }
+  .enq__contacts span:last-child { font-weight: 650; }
+  .ci { display: grid; place-items: center; width: 44px; height: 44px; flex: none; border-radius: 50%; background: var(--white); color: var(--wine); box-shadow: var(--shadow-sm); }
+  .enq__form { padding: clamp(1.5rem, 1rem + 2.5vw, 3rem); border-radius: var(--r-xl); background: var(--white); box-shadow: var(--shadow-lg); }
+
+  .faq__grid { display: grid; gap: 3rem; align-items: start; }
+  @media (min-width: 960px) { .faq__grid { grid-template-columns: 0.75fr 1.25fr; gap: 5rem; } .faq__grid > .stack { position: sticky; top: calc(var(--header-h) + 2rem); } }
+</style>

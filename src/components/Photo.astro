@@ -1,0 +1,38 @@
+---
+import { Picture } from 'astro:assets';
+import type { Photo as P } from '@/data/photos';
+/**
+ * Responsive photograph in a shaped frame. Never upscales: widths are capped at
+ * the source width. `reveal` adds the clip-path mask reveal; `parallax` moves
+ * the image inside its frame on scroll.
+ */
+interface Props {
+  photo: P; shape?: 'arch' | 'arch-sm' | 'circle' | 'round' | 'petal' | 'leaf' | 'none';
+  sizes?: string; class?: string; ratio?: string; reveal?: boolean; parallax?: number;
+  loading?: 'lazy' | 'eager'; position?: string; style?: string; alt?: string;
+}
+const { photo, shape = 'round', sizes = '(min-width: 1000px) 50vw, 100vw', class: cls, ratio, reveal = false, parallax, loading = 'lazy', position, style, alt } = Astro.props;
+const max = photo.src.width;
+const widths = [320, 480, 640, 800].filter((w) => w < max).concat(max);
+const frameStyle = [ratio && `aspect-ratio:${ratio}`, style].filter(Boolean).join(';');
+---
+<div class:list={['frame', shape !== 'none' && `frame--${shape}`, cls]} style={frameStyle || undefined} data-reveal={reveal ? 'mask' : undefined}>
+  <Picture
+    src={photo.src}
+    alt={alt ?? photo.alt}
+    widths={widths}
+    sizes={sizes}
+    formats={['avif', 'webp']}
+    fallbackFormat="jpg"
+    quality={78}
+    loading={loading}
+    decoding="async"
+    fetchpriority={loading === 'eager' ? 'high' : undefined}
+    style={position ? `object-position:${position}` : undefined}
+    data-parallax-img={parallax}
+  />
+</div>
+<style>
+  .frame :global(picture) { display: contents; }
+  .frame :global(img[data-parallax-img]) { height: 118%; margin-top: -9%; }
+</style>

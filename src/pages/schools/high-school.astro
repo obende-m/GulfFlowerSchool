@@ -1,0 +1,232 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/PageHero.astro';
+import Photo from '@/components/Photo.astro';
+import Button from '@/components/Button.astro';
+import Icon from '@/components/Icon.astro';
+import CloseCTA from '@/components/CloseCTA.astro';
+import { photos, people } from '@/data/photos';
+import { jssSubjects, sssSubjects, sssElectives, jssGrading, sssGrading, entranceSubjects } from '@/data/content';
+import { campuses, mapsLink } from '@/data/site';
+const c = campuses[1];
+const grads = [photos.graduate1, photos.graduate2, photos.graduate3, photos.graduate4, photos.graduate5];
+const ca = ['Projects', 'Assignments', 'Class tests', 'Practical work', 'Oral tests'];
+---
+<BaseLayout
+  title="High School — Gulf Flower High School (GFHS)"
+  description="Gulf Flower High School, 1 Gulf Flower Close, Oworonshoki: co-educational JSS1–SS3, day and boarding, 25 students per classroom, WASSCE preparation and scholarships."
+  crumbs={[{ name: 'Our Schools', href: '/schools/' }, { name: 'High School', href: '/schools/high-school/' }]}
+>
+  <PageHero
+    eyebrow="Gulf Flower Two · High School"
+    title="Raising <em>great leaders</em>, JSS1 to SS3"
+    lede="Gulf Flower High School is a co-educational secondary school for day students and boarders, in a serene area of Oworonshoki, Lagos."
+    photo={photos.highSchoolCampus}
+    photo2={photos.labPractical}
+    tone="wine"
+    crumbs={[{ name: 'Our Schools', href: '/schools/' }, { name: 'High School', href: '/schools/high-school/' }]}
+  >
+    <div class="btn-row" data-hero-item>
+      <Button href="/admissions/#enquire" variant="sun">Enquire about JSS1</Button>
+      <Button href={mapsLink(c.mapQuery)} variant="ghost-light" icon="pin" external>{c.street}</Button>
+    </div>
+  </PageHero>
+
+  <section class="section section--white" aria-labelledby="entry-title">
+    <div class="wrap entry__grid">
+      <div class="stack-lg">
+        <div class="stack">
+          <span class="eyebrow">Admission</span>
+          <h2 id="entry-title" data-split>The JSS1 entrance <em class="accent--wine">examination</em></h2>
+        </div>
+        <p class="lede" data-reveal>Questions are drawn from the primary school scheme of work. After the examination, successful candidates are interviewed and admitted. Admission into other Junior and Senior Secondary classes follows a screening test.</p>
+        <Button href="/admissions/" variant="ghost">See all admission routes</Button>
+      </div>
+      <ol role="list" class="exam" data-stagger="0.06">
+        {entranceSubjects.map((s, i) => <li><span>0{i + 1}</span>{s}</li>)}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="class-title">
+    <div class="wrap facts">
+      <article class="fact fact--big" data-reveal>
+        <span class="fact__num" data-count="25">25</span>
+        <div>
+          <h2 id="class-title" class="h3">Students per classroom</h2>
+          <p>Classrooms are designed to accommodate 25 students, for optimal classroom management. They are spacious, well ventilated and equipped with modern furniture.</p>
+        </div>
+      </article>
+      <article class="fact fact--split" data-reveal>
+        <h2 class="h3">How students are assessed</h2>
+        <div class="split" data-split-bar>
+          <div class="split__ca" style="--w:40%"><strong>40%</strong><span>Continuous assessment</span></div>
+          <div class="split__ex" style="--w:60%"><strong>60%</strong><span>Examination</span></div>
+        </div>
+        <p>Continuous assessment adds up a student’s scores in:</p>
+        <ul role="list" class="chips">{ca.map((x) => <li class="chip">{x}</li>)}</ul>
+        <p class="muted small">Mid-term results are handed to parents on the termly open day, and promotional examinations hold at the end of every third term.</p>
+      </article>
+      <article class="fact fact--conduct" data-reveal>
+        <Icon name="shield" size={28} />
+        <h2 class="h4">Conduct in the classroom</h2>
+        <p>Students are expected to behave in a socially acceptable manner, cooperate wholeheartedly with their teachers, pay full attention to lessons and avoid noise-making.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section section--white" aria-labelledby="subj-title">
+    <div class="wrap">
+      <div class="sh sh--split">
+        <div class="stack">
+          <span class="eyebrow">Subjects</span>
+          <h2 id="subj-title" data-split>A broad timetable, <em class="accent--leaf">Basic 7 to SS3</em></h2>
+        </div>
+        <p class="lede" data-reveal>Junior students study across sciences, languages, arts and practical subjects; senior students add specialist sciences, commercial subjects and vocational electives.</p>
+      </div>
+      <div class="subj" data-tabs data-reveal>
+        <div class="seg" role="tablist" aria-label="Subjects by level">
+          <span class="seg__ind" data-tab-indicator aria-hidden="true"></span>
+          <button type="button" role="tab" id="t-jss" aria-controls="p-jss" aria-selected="true" class="seg__btn">Junior Secondary</button>
+          <button type="button" role="tab" id="t-sss" aria-controls="p-sss" aria-selected="false" tabindex="-1" class="seg__btn">Senior Secondary</button>
+        </div>
+        <div role="tabpanel" id="p-jss" aria-labelledby="t-jss" class="subj__panel" tabindex="0">
+          <ul role="list" class="subj__list">{jssSubjects.map((s) => <li>{s}</li>)}</ul>
+        </div>
+        <div role="tabpanel" id="p-sss" aria-labelledby="t-sss" class="subj__panel" hidden tabindex="0">
+          <ul role="list" class="subj__list">{sssSubjects.map((s) => <li>{s}</li>)}</ul>
+          <h3 class="subj__el">Vocational electives</h3>
+          <ul role="list" class="subj__list subj__list--el">{sssElectives.map((s) => <li>{s}</li>)}</ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--paper2" aria-labelledby="grade-title">
+    <div class="wrap grade__grid">
+      <div class="stack-lg">
+        <div class="stack">
+          <span class="eyebrow">Grading system</span>
+          <h2 id="grade-title" data-split>Designed to build <em class="accent--brick">outstanding reading habits</em></h2>
+        </div>
+        <p class="lede" data-reveal>The grading system has two categories: Junior Secondary (Basic Education) and Senior Secondary.</p>
+        <Photo photo={photos.labFunnel} shape="leaf" ratio="4/3" sizes="(min-width: 900px) 480px, 90vw" reveal />
+      </div>
+      <div class="grade__tables" data-reveal>
+        <div class="table-wrap">
+          <table class="data">
+            <caption class="tcap">Junior Secondary (Basic 7–9)</caption>
+            <thead><tr><th scope="col">Score</th><th scope="col">Interpretation</th></tr></thead>
+            <tbody>{jssGrading.map(([s, i]) => <tr><td class="num">{s}</td><td>{i}</td></tr>)}</tbody>
+          </table>
+        </div>
+        <div class="table-wrap">
+          <table class="data">
+            <caption class="tcap">Senior Secondary (SS1–3)</caption>
+            <thead><tr><th scope="col">Score</th><th scope="col">Grade</th><th scope="col">Interpretation</th></tr></thead>
+            <tbody>{sssGrading.map(([s, g, i]) => <tr><td class="num">{s}</td><td><span class={`grade grade--${g[0]}`}>{g}</span></td><td>{i}</td></tr>)}</tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--wine results" id="results" aria-labelledby="res-title">
+    <div class="wrap">
+      <div class="sh sh--center">
+        <span class="eyebrow">Outstanding students</span>
+        <h2 id="res-title" data-split>Our <em class="accent">WASSCE</em> outstanding students</h2>
+        <p class="lede" data-reveal>Senior students graduate in boater hats and Gulf Flower sashes. The best graduating student from SS3 is awarded a scholarship.</p>
+      </div>
+      <ul role="list" class="res__row" data-stagger>
+        {grads.map((g) => <li><Photo photo={g} shape="arch-sm" ratio="216/294" sizes="(min-width: 900px) 220px, 45vw" /></li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="life-title">
+    <div class="wrap life__grid">
+      <figure class="princ" data-reveal>
+        <Photo photo={people.principal} shape="circle" ratio="1" sizes="120px" class="princ__photo" />
+        <blockquote><p>“Our staff members, both teaching and non-teaching, are trained professionals with dedication and commitment to the core.”</p></blockquote>
+        <figcaption><strong>Mr. Femi Famuwagun</strong> · High School Principal<br /><a href="/leadership/#principal" class="link">Read his message <Icon name="arrow" /></a></figcaption>
+      </figure>
+      <div class="stack-lg">
+        <div class="stack">
+          <span class="eyebrow">School life</span>
+          <h2 id="life-title" data-split>Uniform &amp; <em class="accent--wine">boarding</em></h2>
+        </div>
+        <div class="prose stack" data-reveal>
+          <p><strong>Dress code.</strong> Senior students wear customised wine checked long-sleeve shirts on trousers or skirts, with a wine waistcoat. Junior boys wear wine checked short-sleeve shirts on wine trousers; junior girls wear a pinafore on wine checked short-sleeve shirts. The uniform is worn on Monday, Tuesday, Thursday and Friday, and sportswear on Wednesday. Both are available for purchase in school.</p>
+          <p><strong>Boarding.</strong> The boarding house is a home away from home, with every amenity needed to make learning conducive. Meals are carefully and nutritionally prepared by a team of professionals.</p>
+        </div>
+        <Button href="/campus-life/#boarding" variant="ghost">Boarding &amp; dining rules</Button>
+      </div>
+    </div>
+  </section>
+
+  <CloseCTA title="Join Gulf Flower <em>High School</em>." text="Ask about the next JSS1 entrance examination, screening for other classes, day or boarding places, and fees." />
+</BaseLayout>
+
+<style>
+  .entry__grid { display: grid; gap: 3rem; align-items: center; }
+  @media (min-width: 900px) { .entry__grid { grid-template-columns: 1fr 1fr; gap: 5rem; } }
+  .exam { display: grid; gap: 0.6rem; }
+  @media (min-width: 560px) { .exam { grid-template-columns: 1fr 1fr; } }
+  .exam li { display: flex; align-items: center; gap: 1rem; padding: 1.1rem 1.25rem; border-radius: var(--r-md); background: var(--paper); font-weight: 650; transition: background 0.3s, transform 0.4s var(--ease-out); }
+  .exam li:hover { background: var(--wine-soft); transform: translateX(4px); }
+  .exam span { font-family: var(--f-display); font-style: italic; color: var(--wine); font-size: 1.2rem; }
+
+  .facts { display: grid; gap: 1.25rem; }
+  @media (min-width: 960px) { .facts { grid-template-columns: 1fr 1.2fr; } .fact--split { grid-row: span 2; } }
+  .fact { padding: clamp(1.5rem, 1rem + 2vw, 2.5rem); border-radius: var(--r-xl); display: grid; gap: 1rem; align-content: start; }
+  .fact p { color: var(--ink-2); }
+  .fact--big { background: var(--sun); grid-template-columns: auto 1fr; gap: 1.5rem; align-items: center; }
+  .fact--big p { color: var(--ink); }
+  .fact__num { font-family: var(--f-display); font-size: clamp(5rem, 3rem + 6vw, 8rem); line-height: 0.85; letter-spacing: -0.05em; }
+  .fact--split { background: var(--white); box-shadow: inset 0 0 0 1px var(--line); }
+  .fact--conduct { background: var(--leaf-soft); color: var(--leaf-deep); }
+  .split { display: flex; gap: 6px; height: 96px; margin-block: 0.5rem; }
+  .split > div { width: var(--w); display: flex; flex-direction: column; justify-content: flex-end; padding: 0.8rem 1rem; border-radius: 16px; color: var(--white); transform-origin: left; }
+  .split strong { font-family: var(--f-display); font-size: 2rem; line-height: 1; }
+  .split span { font-size: var(--t-xs); font-weight: 600; }
+  .split__ca { background: var(--brick); }
+  .split__ex { background: var(--wine); }
+  .small { font-size: var(--t-sm); }
+
+  .seg { position: relative; display: inline-flex; padding: 0.35rem; border-radius: var(--r-pill); background: var(--paper-2); margin-bottom: 2rem; }
+  .seg__ind { position: absolute; left: 0; top: 0.35rem; bottom: 0.35rem; border-radius: var(--r-pill); background: var(--leaf); transition: transform 0.5s var(--ease-out), width 0.5s var(--ease-out); }
+  .seg__btn { position: relative; z-index: 1; min-height: 48px; padding: 0.5rem 1.4rem; border-radius: var(--r-pill); font-weight: 700; transition: color 0.3s; }
+  .seg__btn[aria-selected='true'] { color: var(--white); }
+  .subj__list { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+  .subj__list li { padding: 0.75rem 1.15rem; border-radius: var(--r-md); background: var(--paper); font-weight: 600; font-size: 1.0625rem; box-shadow: inset 0 0 0 1px var(--line); transition: background 0.3s, transform 0.35s var(--ease-out), color 0.3s; }
+  .subj__list li:hover { background: var(--leaf); color: var(--white); transform: translateY(-3px); }
+  .subj__el { font-family: var(--f-sans); font-size: var(--t-xs); font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--brick); margin: 2rem 0 1rem; }
+  .subj__list--el li { background: var(--brick-soft); }
+  :global(.subj__panel.tab-in) li { animation: chip-in 0.5s var(--ease-out) both; }
+  @keyframes chip-in { from { opacity: 0; transform: translateY(10px) scale(0.96); } }
+
+  .grade__grid { display: grid; gap: 3rem; align-items: start; }
+  @media (min-width: 960px) { .grade__grid { grid-template-columns: 0.85fr 1.15fr; gap: 4rem; } }
+  .grade__tables { display: grid; gap: 1.25rem; }
+  .tcap { caption-side: top; text-align: left; padding: 1rem 1.1rem 0.75rem; font-weight: 700; font-family: var(--f-display); font-size: 1.3rem; background: var(--white); }
+  .grade { display: inline-grid; place-items: center; min-width: 2.6rem; padding: 0.15rem 0.5rem; border-radius: 8px; font-weight: 700; font-size: var(--t-sm); }
+  .grade--A { background: var(--leaf); color: var(--white); }
+  .grade--B { background: var(--leaf-soft); color: var(--leaf-deep); }
+  .grade--C { background: var(--sun-soft); color: #7a5300; }
+  .grade--D, .grade--E, .grade--F { background: var(--wine-soft); color: var(--wine); }
+
+  .res__row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem; max-width: 1100px; margin-inline: auto; }
+  .res__row :global(.frame) { border: 5px solid rgb(255 255 255 / 0.9); }
+  .res__row li { transition: transform 0.5s var(--ease-out); }
+  .res__row li:hover { transform: translateY(-8px) rotate(-1.5deg); }
+  .res__row li:nth-child(even) { margin-top: 2.5rem; }
+  @media (max-width: 700px) { .res__row { grid-template-columns: repeat(2, 1fr); } .res__row li:nth-child(even) { margin-top: 0; } .res__row li:last-child { grid-column: 1 / -1; width: 50%; justify-self: center; } }
+
+  .life__grid { display: grid; gap: 3rem; align-items: center; }
+  @media (min-width: 900px) { .life__grid { grid-template-columns: 0.85fr 1.15fr; gap: 5rem; } }
+  .princ { display: grid; gap: 1.25rem; padding: 2rem; border-radius: var(--r-xl); background: var(--wine-soft); }
+  .princ :global(.princ__photo) { width: 96px; border: 4px solid var(--white); }
+  .princ blockquote p { font-family: var(--f-display); font-style: italic; font-size: 1.6rem; line-height: 1.25; color: var(--wine); }
+  .princ figcaption { font-size: var(--t-sm); color: var(--ink-2); line-height: 2; }
+</style>

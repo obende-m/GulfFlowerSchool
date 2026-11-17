@@ -1,0 +1,148 @@
+---
+import '@fontsource-variable/newsreader/opsz.css';
+import '@fontsource-variable/newsreader/opsz-italic.css';
+import '@fontsource-variable/figtree/index.css';
+import '@fontsource/caveat/600.css';
+import '@/styles/global.css';
+
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import Icon from '@/components/Icon.astro';
+import { site, phones, telHref, campuses, whatsapp } from '@/data/site';
+
+interface Crumb { name: string; href: string }
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  crumbs?: Crumb[];
+  schema?: Record<string, unknown>[];
+  noindex?: boolean;
+  theme?: string;
+}
+const { title, description, image = '/og-image.jpg', crumbs, schema = [], noindex = false, theme = '#4f0f23' } = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, site.url).href;
+const ogImage = new URL(image, site.url).href;
+const fullTitle = Astro.url.pathname === '/' ? title : `${title} | ${site.name}`;
+
+const org = {
+  '@type': 'EducationalOrganization',
+  '@id': `${site.url}/#organization`,
+  name: site.name,
+  alternateName: ['Gulf Flower International School', 'Gulf Flower Schools International'],
+  url: `${site.url}/`,
+  logo: `${site.url}/crest.png`,
+  email: site.email,
+  telephone: phones.map((p) => `+234${p.slice(1)}`),
+  foundingDate: String(site.founded),
+  description: site.description,
+  address: { '@type': 'PostalAddress', addressLocality: site.locality, addressRegion: 'Lagos', addressCountry: 'NG' },
+  subOrganization: campuses.map((c) => ({
+    '@type': 'School',
+    name: `${c.name} — ${c.school}`,
+    url: `${site.url}${c.href}`,
+    address: { '@type': 'PostalAddress', streetAddress: c.street, addressLocality: site.locality, addressRegion: 'Lagos', addressCountry: 'NG' },
+  })),
+};
+const graph: Record<string, unknown>[] = [org, ...schema];
+if (crumbs?.length) {
+  graph.push({
+    '@type': 'BreadcrumbList',
+    itemListElement: [{ name: 'Home', href: '/' }, ...crumbs].map((c, i) => ({
+      '@type': 'ListItem', position: i + 1, name: c.name, item: new URL(c.href, site.url).href,
+    })),
+  });
+}
+const jsonLd = JSON.stringify({ '@context': 'https://schema.org', '@graph': graph });
+---
+<!doctype html>
+<html lang="en-NG" id="top">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <meta name="theme-color" content={theme} />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" href="/crest.png" />
+    <link rel="apple-touch-icon" href="/crest.png" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:locale" content="en_NG" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <script type="application/ld+json" set:html={jsonLd} />
+
+    <script is:inline>
+      // Cross-document view transitions can be aborted by the browser (e.g. a fast second click);
+      // swallow those internal promise rejections so they never surface as errors.
+      ['pageswap', 'pagereveal'].forEach(function (t) {
+        window.addEventListener(t, function (e) {
+          var vt = e.viewTransition; if (!vt) return;
+          [vt.ready, vt.finished, vt.updateCallbackDone].forEach(function (pr) { pr && pr.catch(function () {}); });
+        });
+      });
+      // Hide animated elements only when motion is allowed; fail safe if scripts never start.
+      (function () {
+        var d = document.documentElement;
+        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          d.classList.add('js-anim');
+          setTimeout(function () { if (!window.__gfsAnim) d.classList.remove('js-anim'); }, 3500);
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <Header />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <Footer />
+
+    <nav class="action-bar" aria-label="Quick contact">
+      <a href={telHref(phones[0])} class="action-bar__btn"><Icon name="phone" size={18} />Call</a>
+      {whatsapp && (
+        <a href={`https://wa.me/${whatsapp}`} class="action-bar__btn" target="_blank" rel="noopener"><Icon name="whatsapp" size={18} />WhatsApp</a>
+      )}
+      <a href="/admissions/#enquire" class="action-bar__btn action-bar__btn--main"><Icon name="clipboard" size={18} />Enquire</a>
+    </nav>
+
+    <script>
+      import '@/scripts/main';
+    </script>
+  </body>
+</html>
+
+<style>
+  main:focus { outline: none; }
+  .action-bar {
+    position: fixed; left: 12px; right: 12px; bottom: 12px; z-index: 80;
+    display: flex; gap: 8px; padding: 6px; border-radius: var(--r-pill);
+    background: rgb(27 31 53 / 0.92); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    box-shadow: var(--shadow-lg);
+    transform: translateY(140%); transition: transform 0.5s var(--ease-out);
+  }
+  :global(html.show-action-bar) .action-bar { transform: none; }
+  :global(html.menu-open) .action-bar { transform: translateY(140%); }
+  .action-bar__btn {
+    flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+    min-height: 48px; border-radius: var(--r-pill); color: var(--white); font-weight: 650; font-size: 0.9375rem;
+  }
+  .action-bar__btn--main { background: var(--sun); color: var(--ink); }
+  @media (min-width: 720px) { .action-bar { display: none; } }
+</style>

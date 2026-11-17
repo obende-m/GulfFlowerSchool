@@ -1,0 +1,82 @@
+---
+/**
+ * Interactive age guide built only from the published age bands (admissionpre.html).
+ * Secondary ages are not published, so the guide points to the JSS1 entrance route instead.
+ */
+const bands = [
+  { min: 0, max: 2, cls: 'Pre-age A', note: 'Under 2 years', campus: 'Gulf Flower One' },
+  { min: 2, max: 3, cls: 'Pre-age B', note: '2 – 3 years', campus: 'Gulf Flower One' },
+  { min: 3, max: 4, cls: 'Nursery I', note: '3 – 4 years', campus: 'Gulf Flower One' },
+  { min: 4, max: 5, cls: 'Nursery II', note: '4 – 5 years', campus: 'Gulf Flower One' },
+  { min: 5, max: 6, cls: 'Basic 1', note: '5 – 6 years', campus: 'Gulf Flower One' },
+  { min: 6, max: 7, cls: 'Basic 2', note: '6 – 7 years', campus: 'Gulf Flower One' },
+  { min: 7, max: 8, cls: 'Basic 3', note: '7 – 8 years', campus: 'Gulf Flower One' },
+  { min: 8, max: 9, cls: 'Basic 4', note: '8 – 9 years', campus: 'Gulf Flower One' },
+  { min: 9, max: 10, cls: 'Basic 5', note: '9 – 10 years', campus: 'Gulf Flower One' },
+  { min: 10, max: 11, cls: 'Basic 6', note: '10 – 11 years', campus: 'Gulf Flower One' },
+];
+---
+<div class="ageguide" data-ageguide data-bands={JSON.stringify(bands)}>
+  <div class="ageguide__control">
+    <label for="age-range" class="ageguide__label">How old is your child?</label>
+    <output class="ageguide__age" for="age-range" data-age-out>4 years</output>
+    <input type="range" id="age-range" min="1" max="12" step="1" value="4" data-age-input aria-describedby="age-result" />
+    <div class="ageguide__ticks" aria-hidden="true"><span>1</span><span>3</span><span>5</span><span>7</span><span>9</span><span>11</span><span>12+</span></div>
+  </div>
+  <div class="ageguide__result" id="age-result" aria-live="polite">
+    <p class="ageguide__kicker">Usual class</p>
+    <p class="ageguide__class" data-age-class>Nursery II</p>
+    <p class="ageguide__meta" data-age-meta>4 – 5 years · Gulf Flower One</p>
+    <a class="link" href="/admissions/#enquire" data-age-link>Enquire about this class
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+  </div>
+  <p class="ageguide__small">Based on the age bands the school publishes. Placement is confirmed by a placement test.</p>
+</div>
+<script>
+  document.querySelectorAll<HTMLElement>('[data-ageguide]').forEach((root) => {
+    const bands = JSON.parse(root.dataset.bands || '[]') as { min: number; max: number; cls: string; note: string; campus: string }[];
+    const input = root.querySelector<HTMLInputElement>('[data-age-input]')!;
+    const out = root.querySelector<HTMLElement>('[data-age-out]')!;
+    const cls = root.querySelector<HTMLElement>('[data-age-class]')!;
+    const meta = root.querySelector<HTMLElement>('[data-age-meta]')!;
+    const update = () => {
+      const age = Number(input.value);
+      out.textContent = age >= 12 ? '12+ years' : `${age} year${age === 1 ? '' : 's'}`;
+      const band = bands.find((b) => age >= b.min && age < b.max);
+      cls.classList.remove('pop'); void cls.offsetWidth; cls.classList.add('pop');
+      if (band) {
+        cls.textContent = band.cls;
+        meta.textContent = `${band.note} · ${band.campus}`;
+      } else {
+        cls.textContent = 'JSS1 and above';
+        meta.textContent = 'Entrance examination and interview · Gulf Flower High School';
+      }
+      const pct = ((age - Number(input.min)) / (Number(input.max) - Number(input.min))) * 100;
+      input.style.setProperty('--fill', `${pct}%`);
+    };
+    input.addEventListener('input', update);
+    update();
+  });
+</script>
+<style>
+  .ageguide { display: grid; gap: 1.5rem 3rem; padding: clamp(1.5rem, 1rem + 2.5vw, 2.75rem); border-radius: var(--r-xl); background: var(--white); box-shadow: inset 0 0 0 1px var(--line), var(--shadow-md); }
+  @media (min-width: 860px) { .ageguide { grid-template-columns: 1.1fr 0.9fr; align-items: center; } .ageguide__small { grid-column: 1 / -1; } }
+  .ageguide__control { display: grid; gap: 0.75rem; }
+  .ageguide__label { font-weight: 700; }
+  .ageguide__age { font-family: var(--f-display); font-size: clamp(2.6rem, 2rem + 2vw, 3.6rem); line-height: 1; color: var(--wine); }
+  input[type='range'] { --fill: 27%; appearance: none; width: 100%; height: 44px; background: transparent; cursor: pointer; }
+  input[type='range']::-webkit-slider-runnable-track { height: 10px; border-radius: 10px; background: linear-gradient(90deg, var(--wine) var(--fill), var(--paper-3) var(--fill)); }
+  input[type='range']::-moz-range-track { height: 10px; border-radius: 10px; background: linear-gradient(90deg, var(--wine) var(--fill), var(--paper-3) var(--fill)); }
+  input[type='range']::-webkit-slider-thumb { appearance: none; width: 30px; height: 30px; margin-top: -10px; border-radius: 50%; background: var(--sun); border: 4px solid var(--white); box-shadow: var(--shadow-md); transition: transform 0.2s; }
+  input[type='range']::-moz-range-thumb { width: 24px; height: 24px; border-radius: 50%; background: var(--sun); border: 4px solid var(--white); box-shadow: var(--shadow-md); }
+  input[type='range']:active::-webkit-slider-thumb { transform: scale(1.15); }
+  .ageguide__ticks { display: flex; justify-content: space-between; font-size: var(--t-xs); color: var(--ink-3); font-weight: 600; }
+  .ageguide__result { display: grid; gap: 0.35rem; justify-items: start; padding: 1.5rem; border-radius: var(--r-lg); background: var(--leaf-soft); }
+  .ageguide__kicker { font-size: var(--t-xs); font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--leaf); }
+  .ageguide__class { font-family: var(--f-display); font-size: clamp(2.2rem, 1.8rem + 1.5vw, 3rem); line-height: 1.05; color: var(--leaf-deep); }
+  .ageguide__meta { color: var(--ink-2); font-weight: 600; margin-bottom: 0.5rem; }
+  .ageguide__small { font-size: var(--t-xs); color: var(--ink-3); }
+  :global(.ageguide__class.pop) { animation: pop 0.5s var(--ease-spring); }
+  @keyframes pop { from { transform: scale(0.85); opacity: 0.3; } }
+</style>

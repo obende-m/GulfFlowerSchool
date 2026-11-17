@@ -1,0 +1,163 @@
+---
+import Photo from '../Photo.astro';
+import Petal from '../Petal.astro';
+import Icon from '../Icon.astro';
+import { stages } from '@/data/content';
+import { photos } from '@/data/photos';
+const total = stages.length + 1;
+const pad = (n: number) => String(n).padStart(2, '0');
+---
+<section class="journey" data-deck aria-labelledby="journey-title">
+  <div class="wrap journey__grid">
+    <div class="journey__head">
+      <span class="eyebrow">One school journey</span>
+      <h2 id="journey-title" data-split>From first steps <em class="accent">to SS3</em></h2>
+      <p class="journey__lede">Six stages across two campuses. Keep scrolling to follow a Gulf Flower learner from Pre-age to Senior Secondary.</p>
+
+      <ol class="journey__index" role="list" aria-hidden="true">
+        {stages.map((s, i) => (
+          <li><button type="button" tabindex="-1" data-deck-go={i} class:list={[i === 0 && 'is-active']}><span>{pad(i + 1)}</span>{s.name}</button></li>
+        ))}
+        <li><button type="button" tabindex="-1" data-deck-go={stages.length}><span>{pad(total)}</span>Graduation</button></li>
+      </ol>
+
+      <div class="journey__count" aria-hidden="true">
+        <span class="journey__count-n"><b data-deck-current>01</b> / {pad(total)}</span>
+        <span class="journey__bar"><span data-deck-bar></span></span>
+      </div>
+    </div>
+
+    <ol class="journey__deck" data-deck-stack role="list">
+      {stages.map((s, i) => (
+        <li class="jcard" data-deck-card>
+          <a href={s.href} class="jcard__link">
+            <div class="jcard__top">
+              <span class="jcard__num">{pad(i + 1)}</span>
+              <span class="jcard__campus">{s.campus}</span>
+            </div>
+            <div class="jcard__photo frame frame--round">
+              <Photo photo={s.photo} shape="none" sizes="(min-width: 1000px) 560px, 92vw" />
+            </div>
+            <div class="jcard__body">
+              <h3 class="jcard__title">{s.name}</h3>
+              <p class="jcard__ages">{s.ages}</p>
+              <ul role="list" class="jcard__classes">
+                {s.classes.map((c) => <li>{c}</li>)}
+              </ul>
+              <p class="jcard__note">{s.note}</p>
+            </div>
+            <span class="jcard__more">Explore {s.name} <Icon name="arrow" size={16} /></span>
+          </a>
+        </li>
+      ))}
+      <li class="jcard jcard--end" data-deck-card>
+        <a href="/schools/high-school/#results" class="jcard__link">
+          <Petal size={64} class="jcard__petal" />
+          <h3 class="jcard__title">Graduation</h3>
+          <p class="jcard__note">Our SS3 students sit the WASSCE, and the best graduating student earns a scholarship.</p>
+          <div class="jcard__grads">
+            <Photo photo={photos.graduate1} shape="circle" ratio="1" sizes="90px" />
+            <Photo photo={photos.graduate3} shape="circle" ratio="1" sizes="90px" />
+            <Photo photo={photos.graduate5} shape="circle" ratio="1" sizes="90px" />
+          </div>
+          <span class="jcard__more">Meet our graduates <Icon name="arrow" size={16} /></span>
+        </a>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<style>
+  .journey { position: relative; background: var(--leaf-deep); color: var(--white); padding-block: var(--section); overflow: hidden; }
+  .journey::before { content: ''; position: absolute; inset: 0; background: radial-gradient(60% 50% at 85% 10%, rgb(242 178 58 / 0.18), transparent 70%); pointer-events: none; }
+
+  /* ---------- Default (no motion / small landscape screens): a plain list ---------- */
+  .journey__grid { position: relative; display: grid; gap: 2.5rem; }
+  .journey__grid > * { min-width: 0; }
+  .journey__head { display: grid; gap: 1.1rem; align-content: start; }
+  .journey__head h2 { max-width: 12ch; }
+  .journey__lede { color: rgb(255 253 249 / 0.78); max-width: 44ch; }
+  .journey__index, .journey__count { display: none; }
+  .journey__deck { display: grid; gap: 1rem; }
+  @media (min-width: 700px) { .journey__deck { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1100px) { .journey__deck { grid-template-columns: repeat(3, 1fr); } }
+
+  .jcard__link {
+    position: relative; height: 100%; display: flex; flex-direction: column; gap: 0.9rem;
+    padding: 1rem 1rem 1.25rem; border-radius: var(--r-lg);
+    background: #27593d; box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.12);
+    transition: background 0.4s;
+  }
+  .jcard__link:hover { background: #2c6345; }
+  .jcard__top { display: flex; align-items: center; justify-content: space-between; padding-inline: 0.3rem; }
+  .jcard__num { font-family: var(--f-display); font-size: 1.6rem; font-style: italic; color: var(--sun); }
+  .jcard__campus { font-size: var(--t-xs); font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.3rem 0.7rem; border-radius: var(--r-pill); background: rgb(255 255 255 / 0.1); }
+  .jcard__photo { aspect-ratio: 4 / 3; }
+  .jcard__photo :global(img) { width: 100%; height: 100%; object-fit: cover; transition: transform 1s var(--ease-out); }
+  .jcard__link:hover .jcard__photo :global(img) { transform: scale(1.03); }
+  .jcard__body { display: grid; gap: 0.45rem; padding-inline: 0.3rem; }
+  .jcard__title { font-size: clamp(1.7rem, 1.3rem + 1vw, 2.2rem); }
+  .jcard__ages { font-weight: 700; color: var(--sun); font-size: var(--t-sm); }
+  .jcard__classes { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+  .jcard__classes li { font-size: 0.78rem; padding: 0.25rem 0.6rem; border-radius: var(--r-pill); background: rgb(255 255 255 / 0.1); color: rgb(255 253 249 / 0.85); }
+  .jcard__note { font-size: var(--t-sm); color: rgb(255 253 249 / 0.78); line-height: 1.5; }
+  .jcard__more { margin-top: auto; display: inline-flex; align-items: center; gap: 0.4rem; padding-inline: 0.3rem; font-weight: 700; font-size: var(--t-sm); color: var(--sun); }
+  .jcard__more :global(svg) { transition: transform 0.35s var(--ease-out); }
+  .jcard__link:hover .jcard__more :global(svg) { transform: translateX(5px); }
+
+  .jcard--end .jcard__link { background: var(--sun); color: var(--ink); justify-content: center; padding: 1.75rem; gap: 1.1rem; }
+  .jcard--end .jcard__link:hover { background: #ffc756; }
+  .jcard--end .jcard__note { color: var(--ink-2); font-size: var(--t-base); }
+  .jcard--end .jcard__more { color: var(--wine); margin-top: 0; }
+  .jcard--end :global(.jcard__petal) { color: var(--wine); --petal-centre: var(--sun); }
+  .jcard__grads { display: flex; }
+  .jcard__grads :global(.frame) { width: 82px; border: 4px solid var(--sun); margin-right: -14px; }
+
+  /* ---------- Deck: pinned stack, each card swipes away to reveal the next ---------- */
+  :global(.journey.is-deck) { height: 100svh; padding-block: 0; }
+  :global(.journey.is-deck) .journey__grid { height: 100%; gap: 1rem; grid-template-rows: auto 1fr; padding-block: 1.1rem 1.6rem; }
+  :global(.journey.is-deck) .journey__lede { display: none; }
+  :global(.journey.is-deck) .journey__head { gap: 0.6rem; }
+  :global(.journey.is-deck) .journey__head h2 { font-size: clamp(1.9rem, 1rem + 4vw, 3.6rem); max-width: none; }
+  :global(.journey.is-deck) .journey__count { display: flex; align-items: center; gap: 1rem; font-size: var(--t-sm); color: rgb(255 253 249 / 0.7); }
+  .journey__count-n b { color: var(--sun); font-weight: 700; }
+  .journey__bar { flex: 1; height: 3px; border-radius: 3px; background: rgb(255 255 255 / 0.15); overflow: hidden; }
+  .journey__bar span { display: block; height: 100%; background: var(--sun); transform-origin: left; transform: scaleX(0); }
+
+  :global(.journey.is-deck) .journey__deck { display: grid; grid-template-columns: 1fr; gap: 0; min-height: 0; padding-bottom: 30px; }
+  :global(.journey.is-deck) .jcard { grid-area: 1 / 1; min-height: 0; transform-origin: 50% 100%; will-change: transform; }
+  :global(.journey.is-deck) .jcard__link { box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.12), 0 30px 60px -30px rgb(0 0 0 / 0.55); }
+  :global(.journey.is-deck) .jcard__photo { position: relative; aspect-ratio: auto; flex: 1 1 0; min-height: 90px; }
+  :global(.journey.is-deck) .jcard__photo :global(.frame) { position: absolute; inset: 0; }
+  :global(.journey.is-deck) .jcard:not(.jcard--end) .jcard__note { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  @media (max-width: 699px) {
+    :global(.journey.is-deck) .jcard__classes { display: none; }
+    :global(.journey.is-deck) .jcard__link { gap: 0.7rem; }
+  }
+  @media (max-height: 760px) { :global(.journey.is-deck) .jcard__classes { display: none; } }
+
+  @media (min-width: 1000px) {
+    :global(.journey.is-deck) .journey__grid { grid-template-columns: 0.85fr 1.15fr; grid-template-rows: 1fr; gap: clamp(3rem, 6vw, 6rem); align-items: center; padding-block: calc(var(--header-h) + 1.5rem) 2.5rem; }
+    :global(.journey.is-deck) .journey__head { gap: 1.25rem; }
+    :global(.journey.is-deck) .journey__lede { display: block; }
+    :global(.journey.is-deck) .journey__deck { height: min(640px, 100%); width: min(100%, 560px); justify-self: center; }
+    :global(.journey.is-deck) .jcard__note { -webkit-line-clamp: 3; }
+    :global(.journey.is-deck) .journey__index { display: grid; gap: 0.1rem; margin-top: 0.5rem; }
+    .journey__index button {
+      display: flex; align-items: baseline; gap: 1rem; width: 100%; padding: 0.4rem 0; text-align: left;
+      font-family: var(--f-display); font-size: 1.25rem; color: rgb(255 253 249 / 0.45);
+      transition: color 0.3s, transform 0.45s var(--ease-out);
+    }
+    .journey__index button span { font-family: var(--f-sans); font-size: var(--t-xs); font-weight: 700; letter-spacing: 0.08em; }
+    .journey__index button:hover { color: rgb(255 253 249 / 0.85); }
+    .journey__index button.is-active { color: var(--white); transform: translateX(10px); }
+    .journey__index button.is-active span { color: var(--sun); }
+  }
+  @media (min-width: 1000px) and (max-height: 760px) { :global(.journey.is-deck) .journey__index button { font-size: 1.05rem; padding-block: 0.2rem; } }
+
+  /* Give the deck the whole screen on phones while it is pinned. */
+  @media (max-width: 999px) {
+    :global(html.deck-pinned .site-header) { transform: translateY(-100%); }
+    :global(html.deck-pinned .action-bar) { transform: translateY(140%) !important; }
+  }
+</style>

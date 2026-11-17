@@ -1,0 +1,168 @@
+---
+import Photo from '../Photo.astro';
+import Button from '../Button.astro';
+import { facilityFeatures, facilities } from '@/data/content';
+---
+<section class="section section--white fac" aria-labelledby="fac-title">
+  <div class="wrap">
+    <div class="sh sh--split">
+      <div class="stack">
+        <span class="eyebrow">Facilities</span>
+        <h2 id="fac-title" data-split>Room to <em class="accent--leaf">learn by doing</em></h2>
+      </div>
+      <p class="lede" data-reveal>Gulf Flower Schools parades an enviable, functional infrastructure to enhance learning — from laboratories and studios to a boarding house, sick bay and a fleet of school buses.</p>
+    </div>
+
+    <div class="fac__explorer" data-fac>
+      <ol class="fac__list" role="list">
+        {facilityFeatures.map((f, i) => (
+          <li class:list={['fac__row', i === 0 && 'is-active']} data-fac-row>
+            <button type="button" class="fac__item" data-fac-item={i} aria-expanded={i === 0 ? 'true' : 'false'} aria-controls={`fac-panel-${i}`}>
+              <span class="fac__num">0{i + 1}</span>
+              <span class="fac__title">{f.title}</span>
+              <span class="fac__plus" aria-hidden="true"></span>
+            </button>
+            <div class="fac__panel" id={`fac-panel-${i}`}>
+              <div class="fac__panel-inner">
+                <p class="fac__desc">{f.text}</p>
+                <div class="fac__mphoto">
+                  <Photo photo={f.photo} shape="none" ratio="16/10" sizes="92vw" />
+                </div>
+              </div>
+            </div>
+          </li>
+        ))}
+      </ol>
+      <div class="fac__stage" aria-hidden="true">
+        {facilityFeatures.map((f, i) => (
+          <div class:list={['fac__slide', i === 0 && 'is-active']} data-fac-slide={i}>
+            <Photo photo={f.photo} shape="none" ratio="4/3" sizes="(min-width: 900px) 620px, 100vw" alt="" />
+          </div>
+        ))}
+        <span class="fac__badge" data-fac-label>{facilityFeatures[0].title}</span>
+      </div>
+    </div>
+
+    <div class="fac__all" data-reveal>
+      <h3 class="fac__all-title">Also on campus</h3>
+      <ul role="list" class="chips">
+        {facilities.map((f) => <li class="chip chip--dot">{f}</li>)}
+      </ul>
+      <Button href="/campus-life/" variant="ghost" size="sm">See campus life</Button>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Desktop: hover, focus or click a facility to swap the photograph beside the list.
+  // Phones: each facility opens like an accordion with its own photograph inside it.
+  const wide = window.matchMedia('(min-width: 900px)');
+  document.querySelectorAll<HTMLElement>('[data-fac]').forEach((root) => {
+    const rows = Array.from(root.querySelectorAll<HTMLElement>('[data-fac-row]'));
+    const items = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-fac-item]'));
+    const slides = Array.from(root.querySelectorAll<HTMLElement>('[data-fac-slide]'));
+    const label = root.querySelector<HTMLElement>('[data-fac-label]');
+    let active = 0;
+
+    // Keep the tapped row still on screen while the panel above it collapses.
+    const anchor = (el: HTMLElement) => {
+      const before = el.getBoundingClientRect().top;
+      const t0 = performance.now();
+      const step = () => {
+        const delta = el.getBoundingClientRect().top - before;
+        if (Math.abs(delta) > 0.5) window.scrollBy(0, delta);
+        if (performance.now() - t0 < 750) { requestAnimationFrame(step); return; }
+        // Once open, bring the photo fully into view if it landed below the fold.
+        const photo = el.closest('li')?.querySelector('.fac__mphoto');
+        if (!photo || el.getAttribute('aria-expanded') !== 'true') return;
+        // Leave room for the floating Call / Enquire bar at the bottom of phones.
+        const over = photo.getBoundingClientRect().bottom + 96 - window.innerHeight;
+        const room = el.getBoundingClientRect().top - 16;
+        if (over > 0) window.scrollBy({ top: Math.min(over, room), behavior: 'smooth' });
+      };
+      requestAnimationFrame(step);
+    };
+
+    const activate = (i: number, fromTap = false) => {
+      const closing = !wide.matches && fromTap && i === active && rows[i].classList.contains('is-active');
+      if (!closing && i === active && rows[i].classList.contains('is-active')) return;
+      if (fromTap && !wide.matches) anchor(items[i]);
+      active = i;
+      rows.forEach((r, j) => r.classList.toggle('is-active', !closing && i === j));
+      items.forEach((b, j) => b.setAttribute('aria-expanded', String(!closing && i === j)));
+      slides.forEach((s, j) => s.classList.toggle('is-active', i === j));
+      if (label) label.textContent = items[i].querySelector('.fac__title')?.textContent ?? '';
+    };
+    items.forEach((b, i) => {
+      b.addEventListener('mouseenter', () => { if (wide.matches) activate(i); });
+      b.addEventListener('focus', () => { if (wide.matches) activate(i); });
+      b.addEventListener('click', () => activate(i, true));
+    });
+    // Back on a wide screen, always keep one facility open.
+    wide.addEventListener('change', () => { if (wide.matches && !rows.some((r) => r.classList.contains('is-active'))) activate(active); });
+  });
+</script>
+
+<style>
+  .fac__explorer { display: grid; gap: 2rem; align-items: start; }
+  @media (min-width: 900px) { .fac__explorer { grid-template-columns: 0.9fr 1.1fr; gap: 4rem; } }
+  .fac__list { display: grid; }
+  .fac__row { border-top: 1px solid var(--line); }
+  .fac__row:last-child { border-bottom: 1px solid var(--line); }
+  .fac__item {
+    width: 100%; text-align: left; display: flex; gap: 1.25rem; align-items: baseline;
+    padding: 1.2rem 0.25rem 0.6rem; min-height: 64px;
+    transition: padding 0.45s var(--ease-out), color 0.3s;
+  }
+  .fac__num { font-family: var(--f-display); font-style: italic; font-size: 1.1rem; color: var(--ink-3); transition: color 0.3s; }
+  .fac__title { flex: 1; font-family: var(--f-display); font-size: clamp(1.5rem, 1.2rem + 1vw, 2.1rem); line-height: 1.1; letter-spacing: -0.02em; color: var(--ink-3); transition: color 0.3s; }
+  .fac__item:hover .fac__title { color: var(--ink); }
+  .fac__row.is-active .fac__item { padding-left: 1rem; }
+  .fac__row.is-active .fac__title { color: var(--leaf); }
+  .fac__row.is-active .fac__num { color: var(--sun); }
+
+  /* Panel opens with a grid-row transition (no fixed heights). */
+  .fac__panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.6s var(--ease-out); }
+  .fac__row.is-active .fac__panel { grid-template-rows: 1fr; }
+  .fac__panel-inner { min-height: 0; overflow: hidden; display: grid; gap: 1rem; padding-left: calc(1rem + 1.25rem + 1.1rem); }
+  .fac__desc { color: var(--ink-2); font-size: var(--t-sm); max-width: 44ch; opacity: 0; transform: translateY(8px); transition: opacity 0.4s, transform 0.5s var(--ease-out); }
+  .fac__row.is-active .fac__desc { opacity: 1; transform: none; transition-delay: 0.12s; }
+  .fac__row.is-active .fac__panel-inner { padding-bottom: 1.2rem; }
+
+  .fac__plus { display: none; }
+  .fac__mphoto { display: none; }
+
+  @media (max-width: 899px) {
+    .fac__stage { display: none; }
+    .fac__item { align-items: center; padding-block: 1.1rem; }
+    .fac__row.is-active .fac__item { padding-left: 0.25rem; padding-bottom: 0.75rem; }
+    .fac__panel-inner { padding-left: 0; }
+    .fac__desc { padding-left: calc(1.25rem + 1.1rem + 0.25rem); }
+    .fac__plus { position: relative; display: block; flex: none; width: 36px; height: 36px; border-radius: 50%; background: var(--paper-2); transition: background 0.35s, transform 0.5s var(--ease-spring); }
+    .fac__plus::before, .fac__plus::after { content: ''; position: absolute; left: 50%; top: 50%; width: 14px; height: 2px; margin: -1px 0 0 -7px; border-radius: 2px; background: var(--ink); transition: background 0.35s; }
+    .fac__plus::after { transform: rotate(90deg); }
+    .fac__row.is-active .fac__plus { background: var(--leaf); transform: rotate(135deg); }
+    .fac__row.is-active .fac__plus::before, .fac__row.is-active .fac__plus::after { background: var(--white); }
+
+    /* Each photo wipes open from the top and settles as its row opens. */
+    .fac__mphoto { display: block; border-radius: var(--r-lg) 6px var(--r-lg) 6px; overflow: hidden; background: var(--paper-3); clip-path: inset(0 0 100% 0 round var(--r-lg)); transition: clip-path 0.8s var(--ease-out); }
+    .fac__mphoto :global(img) { width: 100%; height: 100%; object-fit: cover; transform: scale(1.18); transition: transform 1.2s var(--ease-out); }
+    .fac__row.is-active .fac__mphoto { clip-path: inset(0 0 0 0 round var(--r-lg) 6px var(--r-lg) 6px); transition-delay: 0.08s; }
+    .fac__row.is-active .fac__mphoto :global(img) { transform: scale(1); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .fac__panel, .fac__mphoto, .fac__mphoto :global(img), .fac__desc { transition: none !important; }
+  }
+
+  .fac__stage { position: relative; aspect-ratio: 4 / 3; border-radius: var(--r-xl) 8px var(--r-xl) 8px; overflow: hidden; background: var(--paper-3); box-shadow: var(--shadow-lg); }
+  @media (min-width: 900px) { .fac__stage { position: sticky; top: calc(var(--header-h) + 2rem); } }
+  .fac__slide { position: absolute; inset: 0; clip-path: inset(0 0 0 100%); transition: clip-path 0.9s var(--ease-out); }
+  .fac__slide :global(.frame) { height: 100%; }
+  .fac__slide :global(img) { transform: scale(1.15); transition: transform 1.4s var(--ease-out); }
+  .fac__slide.is-active { clip-path: inset(0 0 0 0); z-index: 1; }
+  .fac__slide.is-active :global(img) { transform: scale(1); }
+  .fac__badge { position: absolute; left: 1.2rem; bottom: 1.2rem; z-index: 2; padding: 0.55rem 1rem; border-radius: var(--r-pill); background: var(--paper); font-weight: 700; font-size: var(--t-sm); box-shadow: var(--shadow-sm); }
+
+  .fac__all { margin-top: clamp(3rem, 2rem + 3vw, 5rem); display: grid; gap: 1.25rem; justify-items: start; padding-top: 2.5rem; border-top: 1px dashed var(--line-strong); }
+  .fac__all-title { font-family: var(--f-sans); font-size: var(--t-xs); text-transform: uppercase; letter-spacing: 0.14em; font-weight: 700; color: var(--ink-3); }
+</style>

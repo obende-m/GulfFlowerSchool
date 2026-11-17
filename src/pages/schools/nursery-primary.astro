@@ -1,0 +1,210 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/PageHero.astro';
+import Photo from '@/components/Photo.astro';
+import Button from '@/components/Button.astro';
+import Icon from '@/components/Icon.astro';
+import Petal from '@/components/Petal.astro';
+import CloseCTA from '@/components/CloseCTA.astro';
+import { photos, people } from '@/data/photos';
+import { primaryFacilities } from '@/data/content';
+import { campuses, mapsLink } from '@/data/site';
+
+const c = campuses[0];
+const groups = [
+  { name: 'Pre-age', tone: 'sun', rows: [['Pre-age A', 'Under 2 years'], ['Pre-age B', '2 – 3 years']] },
+  { name: 'Nursery', tone: 'leaf', rows: [['Nursery I', '3 – 4 years'], ['Nursery II', '4 – 5 years']] },
+  { name: 'Lower Primary (Basic 1–3)', tone: 'brick', rows: [['Basic 1', '5 – 6 years'], ['Basic 2', '6 – 7 years'], ['Basic 3', '7 – 8 years']] },
+  { name: 'Upper Primary (Basic 4–6)', tone: 'sky', rows: [['Basic 4', '8 – 9 years'], ['Basic 5', '9 – 10 years'], ['Basic 6', '10 – 11 years']] },
+];
+const extras = ['Yearly excursions', 'Taekwondo', 'Swimming', 'Track and field', 'Literary and debate society', 'Press club', 'Music club', 'Cultural groups', 'Choreography', 'Show-and-tell'];
+---
+<BaseLayout
+  title="Nursery & Primary School — Gulf Flower One"
+  description="Gulf Flower One, 6 Atanda Alonge Street, Oworonshoki: Pre-age, Nursery I–II and Basic 1–6 with Montessori, Jolly Phonics, air-conditioned classrooms and boarding."
+  crumbs={[{ name: 'Our Schools', href: '/schools/' }, { name: 'Nursery & Primary', href: '/schools/nursery-primary/' }]}
+>
+  <PageHero
+    eyebrow="Gulf Flower One · Nursery & Primary"
+    title="A gentle start, a <em>strong foundation</em>"
+    lede="From Pre-age to Basic 6, our nursery and primary school gives every child a secure, happy and stimulating start to learning."
+    photo={photos.primaryCourtyard}
+    photo2={photos.primaryCastleSlide}
+    crumbs={[{ name: 'Our Schools', href: '/schools/' }, { name: 'Nursery & Primary', href: '/schools/nursery-primary/' }]}
+  >
+    <div class="btn-row" data-hero-item>
+      <Button href="/admissions/#enquire">Enquire about a place</Button>
+      <Button href={mapsLink(c.mapQuery)} variant="ghost" icon="pin" external>{c.street}</Button>
+    </div>
+  </PageHero>
+
+  <section class="section section--white threshold" aria-labelledby="th-title">
+    <div class="wrap th__grid">
+      <div class="stack-lg">
+        <div class="stack">
+          <span class="eyebrow">First steps over the threshold</span>
+          <h2 id="th-title" data-split>The first break with the routines of <em class="accent--leaf">home</em></h2>
+        </div>
+        <p class="lede" data-reveal>Starting school is a big moment for children — and the first anxieties for parents. At the Nursery &amp; Primary, we make sure your child feels secure, has access to the best facilities and activities, and receives a gentle introduction to learning.</p>
+      </div>
+      <figure class="ht" data-reveal>
+        <Photo photo={people.headTeacher} shape="circle" ratio="1" sizes="140px" class="ht__photo" />
+        <blockquote><p>“We make learning irresistible, enabling children of all abilities to fly. Our learners feel safe to develop creatively and academically.”</p></blockquote>
+        <figcaption><strong>Mrs. Omotayo Atode</strong><span>Head Teacher · <a href="/leadership/#head-teacher" class="link">Read her message</a></span></figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="classes-title">
+    <div class="wrap">
+      <div class="sh sh--split">
+        <div class="stack">
+          <span class="eyebrow">Admission &amp; classes</span>
+          <h2 id="classes-title" data-split>Classes and <em class="accent--wine">age bands</em></h2>
+        </div>
+        <p class="lede" data-reveal>A placement test is conducted before a child is admitted into a class. All tests are conducted in English, so prospective pupils need an adequate knowledge of the language.</p>
+      </div>
+      <div class="bands" data-stagger>
+        {groups.map((g) => (
+          <div class={`band band--${g.tone}`}>
+            <h3 class="band__title">{g.name}</h3>
+            <ul role="list">
+              {g.rows.map(([cls, age]) => <li><span>{cls}</span><span class="band__age">{age}</span></li>)}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--paper2" aria-labelledby="curr-title">
+    <div class="wrap curr__grid">
+      <div class="curr__art">
+        <Photo photo={photos.primaryMuralWall} shape="arch" ratio="4/5" sizes="(min-width: 900px) 420px, 80vw" reveal parallax={1} position="35% 50%" />
+        <Petal size={84} class="curr__petal" data-spin />
+      </div>
+      <div class="stack-lg">
+        <div class="stack">
+          <span class="eyebrow">Curriculum</span>
+          <h2 id="curr-title" data-split>Federal curriculum, with <em class="accent--brick">Jolly Phonics &amp; Montessori</em></h2>
+        </div>
+        <div class="prose stack" data-reveal>
+          <p>Our curriculum is the planned academic programme we expect our pupils to follow. It is structured to adapt to contemporary learning and teaching practices such as Jolly Phonics and Montessori packages, which complement the curriculum set by the Federal Ministry of Education.</p>
+          <p>Gulf Flower pupils have recorded many successes in academic and non-academic programmes at State and Federal levels, including the State Entrance Examination, the Federal Common Entrance Examination and inter-school competitions.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="pfac-title">
+    <div class="wrap">
+      <div class="sh">
+        <span class="eyebrow">Facilities</span>
+        <h2 id="pfac-title" data-split>Learning goes hand in hand with <em class="accent--leaf">good facilities</em></h2>
+      </div>
+      <div class="pfac">
+        <ul role="list" class="pfac__list" data-stagger>
+          {primaryFacilities.map((f, i) => (
+            <li><span class="pfac__n">0{i + 1}</span>{f}</li>
+          ))}
+        </ul>
+        <div class="pfac__photos">
+          <Photo photo={photos.primaryCourtyardSlide} shape="round" ratio="4/3" sizes="(min-width: 900px) 420px, 90vw" reveal />
+          <Photo photo={photos.coveredPlayHall} shape="round" ratio="4/3" sizes="(min-width: 900px) 420px, 90vw" reveal />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--leaf" aria-labelledby="pex-title">
+    <div class="wrap pex__grid">
+      <div class="stack-lg">
+        <div class="stack">
+          <span class="eyebrow">Extra-curricular activities</span>
+          <h2 id="pex-title" data-split>Keeping pupils physically, socially and <em class="accent">mentally alert</em></h2>
+        </div>
+        <p class="lede" data-reveal>The school engages pupils in sport, clubs and culture to keep them alert. The nation’s traditional heritage is celebrated yearly and honed in the school’s cultural groups.</p>
+        <ul role="list" class="chips pex__chips" data-stagger="0.04">
+          {extras.map((e) => <li class="chip">{e}</li>)}
+        </ul>
+      </div>
+      <Photo photo={photos.primaryGreenStairs} shape="leaf" ratio="1" sizes="(min-width: 900px) 460px, 90vw" reveal />
+    </div>
+  </section>
+
+  <section class="section section--white" aria-labelledby="day-title">
+    <div class="wrap">
+      <div class="sh">
+        <span class="eyebrow">Day to day</span>
+        <h2 id="day-title" data-split>Uniform, meals &amp; <em class="accent--wine">boarding</em></h2>
+      </div>
+      <div class="day__grid" data-stagger>
+        <article class="day card">
+          <span class="day__icon d1"><Icon name="users" size={24} /></span>
+          <h3 class="h4">Dress code</h3>
+          <p>Boys wear a blue and white striped shirt with blue shorts; girls wear a blue and white striped dress. Both wear white socks and black leather shoes. The uniform is worn every day except Wednesday, when pupils wear the school sportswear.</p>
+        </article>
+        <article class="day card">
+          <span class="day__icon d2"><Icon name="sun" size={24} /></span>
+          <h3 class="h4">Feeding</h3>
+          <p>Day pupils who bring food eat it during the short or long break. Those without can get hygienically prepared food from the school kitchen. Boarders are expected to have eaten in the dining area before 7:25am.</p>
+        </article>
+        <article class="day card">
+          <span class="day__icon d3"><Icon name="home" size={24} /></span>
+          <h3 class="h4">Boarding</h3>
+          <p>The school operates boarding at primary level as well as secondary — a home away from home, with meals nutritionally prepared by professionals.</p>
+          <a href="/campus-life/#boarding" class="link">About boarding <Icon name="arrow" /></a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <CloseCTA title="Begin your child’s <em>Gulf Flower</em> story." />
+</BaseLayout>
+
+<style>
+  .th__grid { display: grid; gap: 3rem; align-items: center; }
+  @media (min-width: 900px) { .th__grid { grid-template-columns: 1.1fr 0.9fr; gap: 5rem; } }
+  .ht { display: grid; gap: 1.25rem; padding: 2rem; border-radius: var(--r-xl); background: var(--sky-soft); }
+  .ht :global(.ht__photo) { width: 96px; border: 4px solid var(--white); }
+  .ht blockquote p { font-family: var(--f-display); font-style: italic; font-size: 1.6rem; line-height: 1.25; color: var(--sky); }
+  .ht figcaption { display: grid; gap: 0.2rem; font-size: var(--t-sm); }
+  .ht figcaption span { color: var(--ink-3); }
+
+  .bands { display: grid; gap: 1rem; }
+  @media (min-width: 700px) { .bands { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 1100px) { .bands { grid-template-columns: repeat(4, 1fr); } }
+  .band { padding: 1.5rem; border-radius: var(--r-lg); display: grid; gap: 1rem; align-content: start; transition: transform 0.45s var(--ease-out); }
+  .band:hover { transform: translateY(-4px); }
+  .band__title { font-family: var(--f-sans); font-size: 1rem; font-weight: 700; }
+  .band ul { display: grid; gap: 0.5rem; }
+  .band li { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding: 0.7rem 0.9rem; border-radius: 12px; background: rgb(255 255 255 / 0.65); font-weight: 650; }
+  .band__age { font-size: var(--t-sm); font-weight: 600; color: var(--ink-2); white-space: nowrap; }
+  .band--sun { background: var(--sun-soft); } .band--leaf { background: var(--leaf-soft); } .band--brick { background: var(--brick-soft); } .band--sky { background: var(--sky-soft); }
+
+  .curr__grid { display: grid; gap: 3rem; align-items: center; }
+  @media (min-width: 900px) { .curr__grid { grid-template-columns: 0.8fr 1.2fr; gap: 5rem; } }
+  .curr__art { position: relative; width: min(100%, 420px); justify-self: center; }
+  .curr__art :global(.curr__petal) { position: absolute; left: -24px; bottom: 30px; color: var(--leaf); --petal-centre: var(--sun); }
+
+  .pfac { display: grid; gap: 2.5rem; align-items: center; }
+  @media (min-width: 900px) { .pfac { grid-template-columns: 0.9fr 1.1fr; gap: 4rem; } }
+  .pfac__list { display: grid; }
+  .pfac__list li { display: flex; align-items: baseline; gap: 1.25rem; padding: 1.25rem 0; border-top: 1px solid var(--line); font-family: var(--f-display); font-size: clamp(1.4rem, 1.1rem + 1vw, 1.9rem); line-height: 1.2; }
+  .pfac__list li:last-child { border-bottom: 1px solid var(--line); }
+  .pfac__n { font-family: var(--f-sans); font-size: var(--t-xs); font-weight: 700; color: var(--brick); letter-spacing: 0.1em; }
+  .pfac__photos { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; align-items: start; }
+  .pfac__photos > :global(:nth-child(2)) { margin-top: 3rem; }
+
+  .pex__grid { display: grid; gap: 3rem; align-items: center; }
+  @media (min-width: 900px) { .pex__grid { grid-template-columns: 1.2fr 0.8fr; gap: 5rem; } }
+  .pex__chips :global(.chip) { background: rgb(255 255 255 / 0.1); color: var(--white); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.2); }
+  .pex__chips :global(.chip:hover) { background: var(--sun); color: var(--ink); transform: translateY(-2px); }
+
+  .day__grid { display: grid; gap: 1.25rem; }
+  @media (min-width: 900px) { .day__grid { grid-template-columns: repeat(3, 1fr); } }
+  .day { padding: 1.75rem; gap: 0.85rem; align-items: flex-start; }
+  .day p { color: var(--ink-2); }
+  .day__icon { display: grid; place-items: center; width: 52px; height: 52px; border-radius: 16px; color: var(--white); }
+  .d1 { background: var(--sky); } .d2 { background: var(--sun); color: var(--ink); } .d3 { background: var(--wine); }
+</style>

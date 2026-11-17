@@ -1,0 +1,23 @@
+---
+import Icon from './Icon.astro';
+interface Props {
+  href?: string; variant?: 'wine' | 'sun' | 'leaf' | 'light' | 'ghost' | 'ghost-light'; size?: 'sm' | 'md';
+  external?: boolean; type?: 'button' | 'submit'; icon?: 'arrow' | 'arrow-up-right' | 'phone' | 'mail' | 'external' | 'none'; class?: string; [k: string]: unknown;
+}
+const { href, variant = 'wine', size = 'md', external, type = 'button', icon = 'arrow', class: cls, ...rest } = Astro.props;
+const classes = ['btn', variant !== 'wine' && `btn--${variant}`, size === 'sm' && 'btn--sm', cls].filter(Boolean).join(' ');
+const ext = external ? { target: '_blank', rel: 'noopener' } : {};
+---
+{href ? (
+  <a href={href} class={classes} {...ext} {...rest}>
+    <slot />
+    {icon !== 'none' && <span class="arrow"><Icon name={icon} size={18} /><Icon name={icon} size={18} /></span>}
+    {external && <span class="sr-only">(opens in a new tab)</span>}
+  </a>
+) : (
+  <button type={type} class={classes} {...rest}>
+    <slot />
+    <span class="spinner" aria-hidden="true"></span>
+    {icon !== 'none' && <span class="arrow"><Icon name={icon} size={18} /><Icon name={icon} size={18} /></span>}
+  </button>
+)}

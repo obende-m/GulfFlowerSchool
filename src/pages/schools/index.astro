@@ -1,0 +1,131 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/PageHero.astro';
+import Photo from '@/components/Photo.astro';
+import AgeGuide from '@/components/AgeGuide.astro';
+import Icon from '@/components/Icon.astro';
+import CloseCTA from '@/components/CloseCTA.astro';
+import { photos } from '@/data/photos';
+import { stages } from '@/data/content';
+import { campuses } from '@/data/site';
+---
+<BaseLayout
+  title="Our Schools — Nursery, Primary & High School"
+  description="Gulf Flower Schools teaches children from Pre-age and Nursery through Basic 1–6 at Gulf Flower One, and JSS1 to SS3 at Gulf Flower High School, Oworonshoki, Lagos."
+  crumbs={[{ name: 'Our Schools', href: '/schools/' }]}
+>
+  <PageHero
+    eyebrow="Our schools"
+    title="One journey, <em>two campuses</em>"
+    lede="Children join us as young as Pre-age and can stay through to SS3. Gulf Flower One teaches nursery and primary pupils; Gulf Flower Two is Gulf Flower High School."
+    photo={photos.primaryGreenStairs}
+    photo2={photos.labFunnel}
+    tone="sky"
+    crumbs={[{ name: 'Our Schools', href: '/schools/' }]}
+  />
+
+  <section class="section" aria-labelledby="pick-title">
+    <div class="wrap">
+      <div class="pick__grid">
+        {campuses.map((c, i) => (
+          <a href={c.href} class:list={['pick', i === 0 ? 'pick--one' : 'pick--two']} data-reveal>
+            <div class="pick__media">
+              <Photo photo={i === 0 ? photos.primaryCourtyard : photos.highSchoolArch} shape="none" ratio="4/3" sizes="(min-width: 900px) 600px, 100vw" />
+            </div>
+            <div class="pick__body">
+              <span class="pick__kicker">{c.name}</span>
+              <h2 id={i === 0 ? 'pick-title' : undefined} class="pick__title">{c.school}</h2>
+              <p>{i === 0 ? 'Pre-age, Nursery I–II and Basic 1–6. Placement test in English; Jolly Phonics and Montessori in the early years.' : 'JSS1–3 and SS1–3, day and boarding. Entrance examination and interview for JSS1; classrooms designed for 25 students.'}</p>
+              <span class="pick__go">Explore <Icon name="arrow" /></span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--paper2" aria-labelledby="guide-title">
+    <div class="wrap">
+      <div class="sh sh--split">
+        <div class="stack">
+          <span class="eyebrow">Age guide</span>
+          <h2 id="guide-title" data-split>Which class is <em class="accent--leaf">right for my child?</em></h2>
+        </div>
+        <p class="lede" data-reveal>Move the slider to see the class a child of that age usually joins, using the age bands the school publishes.</p>
+      </div>
+      <div data-reveal><AgeGuide /></div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="table-title">
+    <div class="wrap">
+      <div class="sh">
+        <span class="eyebrow">Classes at a glance</span>
+        <h2 id="table-title" data-split>Every stage, <em class="accent--brick">Pre-age to SS3</em></h2>
+      </div>
+      <div class="table-wrap" data-reveal>
+        <table class="data">
+          <caption class="sr-only">Gulf Flower Schools stages, classes, ages and campuses</caption>
+          <thead><tr><th scope="col">Stage</th><th scope="col">Classes</th><th scope="col">Ages</th><th scope="col">Campus</th></tr></thead>
+          <tbody>
+            {stages.map((s) => (
+              <tr>
+                <th scope="row"><a href={s.href} class="tlink">{s.name}</a></th>
+                <td>{s.classes.join(' · ')}</td>
+                <td class="num">{s.ages.includes('year') ? s.ages : '—'}</td>
+                <td>{s.campus}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="muted note" data-reveal>Ages for the secondary classes are not published. Entry into JSS1 is by entrance examination and interview; other secondary classes by screening test.</p>
+    </div>
+  </section>
+
+  <section class="section section--white" aria-labelledby="both-title">
+    <div class="wrap">
+      <div class="sh sh--center">
+        <span class="eyebrow">Across both schools</span>
+        <h2 id="both-title" data-split>What every Gulf Flower <em class="accent--wine">learner shares</em></h2>
+      </div>
+      <ul role="list" class="shared" data-stagger>
+        <li><span class="shared__icon s1"><Icon name="book" size={24} /></span><h3 class="h4">Federal curriculum, enriched</h3><p>The Ministry of Education curriculum with formative elements from the British curriculum.</p></li>
+        <li><span class="shared__icon s2"><Icon name="home" size={24} /></span><h3 class="h4">Day &amp; boarding</h3><p>Boarding is available at both primary and secondary levels — a home away from home.</p></li>
+        <li><span class="shared__icon s3"><Icon name="star" size={24} /></span><h3 class="h4">Clubs &amp; competitions</h3><p>Sport, debate, music, cultural day, excursions and inter-school competitions.</p></li>
+        <li><span class="shared__icon s4"><Icon name="grad" size={24} /></span><h3 class="h4">Scholarships</h3><p>Awards for the best Primary 6 learner, the best SS3 student and an indigent student from the community.</p></li>
+      </ul>
+    </div>
+  </section>
+
+  <CloseCTA />
+</BaseLayout>
+
+<style>
+  .pick__grid { display: grid; gap: 1.25rem; }
+  @media (min-width: 900px) { .pick__grid { grid-template-columns: 1fr 1fr; gap: 1.5rem; } }
+  .pick { display: grid; border-radius: var(--r-xl); overflow: hidden; background: var(--white); box-shadow: inset 0 0 0 1px var(--line); transition: transform 0.5s var(--ease-out), box-shadow 0.5s; }
+  .pick:hover { transform: translateY(-6px); box-shadow: inset 0 0 0 1px var(--line), var(--shadow-lg); }
+  .pick__media :global(img) { transition: transform 1.1s var(--ease-out); }
+  .pick:hover .pick__media :global(img) { transform: scale(1.05); }
+  .pick__body { display: grid; gap: 0.75rem; padding: clamp(1.5rem, 1rem + 2vw, 2.5rem); justify-items: start; }
+  .pick__kicker { font-size: var(--t-xs); font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; }
+  .pick--one .pick__kicker { color: var(--sky); }
+  .pick--two .pick__kicker { color: var(--wine); }
+  .pick__title { font-size: clamp(2rem, 1.5rem + 1.8vw, 3rem); }
+  .pick__body p { color: var(--ink-2); max-width: 46ch; }
+  .pick__go { display: inline-flex; align-items: center; gap: 0.4rem; font-weight: 700; color: var(--wine); margin-top: 0.5rem; }
+  .pick__go :global(svg) { transition: transform 0.35s var(--ease-out); }
+  .pick:hover .pick__go :global(svg) { transform: translateX(5px); }
+  .tlink { display: inline-flex; align-items: center; min-height: 44px; color: var(--wine); font-weight: 700; }
+  .tlink:hover { text-decoration: underline; text-underline-offset: 3px; }
+  .note { margin-top: 1rem; font-size: var(--t-sm); }
+  .shared { display: grid; gap: 1rem; }
+  @media (min-width: 700px) { .shared { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 1100px) { .shared { grid-template-columns: repeat(4, 1fr); } }
+  .shared li { display: grid; gap: 0.75rem; align-content: start; padding: 1.75rem; border-radius: var(--r-lg); background: var(--paper); transition: transform 0.45s var(--ease-out), background 0.3s; }
+  .shared li:hover { transform: translateY(-4px); background: var(--sun-soft); }
+  .shared p { color: var(--ink-2); font-size: var(--t-sm); }
+  .shared__icon { display: grid; place-items: center; width: 52px; height: 52px; border-radius: 16px; color: var(--white); }
+  .s1 { background: var(--wine); } .s2 { background: var(--leaf); } .s3 { background: var(--brick); } .s4 { background: var(--sky); }
+</style>

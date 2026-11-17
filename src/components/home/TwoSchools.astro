@@ -1,0 +1,80 @@
+---
+import Photo from '../Photo.astro';
+import Icon from '../Icon.astro';
+import { photos } from '@/data/photos';
+import { campuses } from '@/data/site';
+const cards = [
+  {
+    ...campuses[0],
+    photo: photos.primaryGreenStairs,
+    tone: 'sky',
+    headline: 'Nursery & Primary',
+    range: 'Pre-age · Nursery I–II · Basic 1–6',
+    points: ['Montessori and Jolly Phonics in the early years', 'Air-conditioned classrooms', 'Placement test in English'],
+  },
+  {
+    ...campuses[1],
+    photo: photos.highSchoolArch,
+    tone: 'wine',
+    headline: 'High School',
+    range: 'JSS1–3 · SS1–3 · Day & boarding',
+    points: ['Classrooms designed for 25 students', 'Science laboratory, ICT and music studios', 'Entrance examination and interview for JSS1'],
+  },
+];
+---
+<section class="section schools" aria-labelledby="schools-title">
+  <div class="wrap">
+    <div class="sh sh--split">
+      <div class="stack">
+        <span class="eyebrow">Our schools</span>
+        <h2 id="schools-title" data-split>Two campuses, <em class="accent--brick">one</em> Gulf Flower family</h2>
+      </div>
+      <p class="lede" data-reveal>Both campuses sit by Miyaki Junction in Oworonshoki. Gulf Flower One is home to our nursery and primary pupils; Gulf Flower Two is Gulf Flower High School.</p>
+    </div>
+
+    <div class="schools__grid">
+      {cards.map((c, i) => (
+        <a href={c.href} class={`scard scard--${c.tone}`} data-reveal>
+          <div class="scard__media">
+            <Photo photo={c.photo} shape="none" ratio="3/2" sizes="(min-width: 900px) 600px, 100vw" parallax={1} />
+            <span class="scard__tag">{c.name}</span>
+          </div>
+          <div class="scard__body">
+            <p class="scard__range">{c.range}</p>
+            <h3 class="scard__title">{c.headline}</h3>
+            <ul role="list" class="scard__points">
+              {c.points.map((p) => <li>{p}</li>)}
+            </ul>
+            <div class="scard__foot">
+              <span class="scard__addr"><Icon name="pin" size={16} />{c.street}</span>
+              <span class="scard__go" aria-hidden="true"><Icon name="arrow-up-right" size={22} /></span>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+<style>
+  .schools__grid { display: grid; gap: 1.25rem; }
+  @media (min-width: 900px) { .schools__grid { grid-template-columns: 1fr 1fr; gap: 1.5rem; } .scard:nth-child(2) { margin-top: 4rem; } }
+  .scard { display: flex; flex-direction: column; border-radius: var(--r-xl); overflow: hidden; color: var(--white); transition: transform 0.6s var(--ease-out), box-shadow 0.6s var(--ease-out); }
+  .scard--sky { background: var(--sky); }
+  .scard--wine { background: var(--wine); }
+  .scard:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+  .scard__media { position: relative; }
+  .scard__media :global(.frame) { border-radius: 0; }
+  .scard__media :global(img) { transition: transform 1.2s var(--ease-out); }
+  .scard:hover .scard__media :global(img) { transform: scale(1.05); }
+  .scard__tag { position: absolute; left: 1.2rem; top: 1.2rem; padding: 0.45rem 0.9rem; border-radius: var(--r-pill); background: var(--paper); color: var(--ink); font-size: var(--t-xs); font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+  .scard__body { display: grid; gap: 1rem; padding: clamp(1.5rem, 1rem + 2vw, 2.4rem); }
+  .scard__range { font-size: var(--t-sm); font-weight: 700; color: var(--sun); }
+  .scard__title { font-size: clamp(2.2rem, 1.6rem + 2vw, 3.2rem); }
+  .scard__points { display: grid; gap: 0.5rem; }
+  .scard__points li { position: relative; padding-left: 1.4rem; color: rgb(255 253 249 / 0.85); }
+  .scard__points li::before { content: ''; position: absolute; left: 0; top: 0.6em; width: 8px; height: 8px; border-radius: 50%; background: var(--sun); }
+  .scard__foot { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-top: 0.75rem; padding-top: 1.25rem; border-top: 1px solid rgb(255 255 255 / 0.18); }
+  .scard__addr { display: inline-flex; align-items: center; gap: 0.45rem; font-size: var(--t-sm); font-weight: 600; }
+  .scard__go { display: grid; place-items: center; width: 52px; height: 52px; border-radius: 50%; background: var(--paper); color: var(--ink); transition: transform 0.5s var(--ease-spring), background 0.3s; }
+  .scard:hover .scard__go { transform: rotate(45deg); background: var(--sun); }
+</style>

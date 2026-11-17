@@ -1,0 +1,61 @@
+---
+import { Picture } from 'astro:assets';
+import Icon from '../Icon.astro';
+import Petal from '../Petal.astro';
+import { leaders } from '@/data/content';
+const list = leaders.slice(1);
+---
+<section class="section section--wine voices" aria-labelledby="voices-title">
+  <Petal size={420} class="voices__deco" data-spin />
+  <div class="wrap voices__grid" data-tabs>
+    <div class="voices__side">
+      <span class="eyebrow">Our leadership</span>
+      <h2 id="voices-title" data-split>Words from the people who <em class="accent">lead our schools</em></h2>
+      <div class="voices__tabs" role="tablist" aria-label="Choose a leader">
+        {list.map((l, i) => (
+          <button type="button" role="tab" id={`vt-${l.id}`} aria-controls={`vp-${l.id}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1} class="vtab">
+            <Picture src={l.photo.src} alt="" widths={[96, 160]} sizes="64px" formats={['avif', 'webp']} class="vtab__img" />
+            <span class="vtab__text"><strong>{l.name}</strong><small>{l.role}</small></span>
+          </button>
+        ))}
+      </div>
+    </div>
+    <div class="voices__panels">
+      {list.map((l, i) => (
+        <figure role="tabpanel" id={`vp-${l.id}`} aria-labelledby={`vt-${l.id}`} hidden={i !== 0} class="vpanel" tabindex="0">
+          <svg class="vpanel__mark" viewBox="0 0 64 48" aria-hidden="true"><path d="M0 48V28C0 12 8 3 24 0l3 6C17 9 13 15 13 23h11v25zm37 0V28C37 12 45 3 61 0l3 6c-10 3-14 9-14 17h11v25z" fill="currentColor"/></svg>
+          <blockquote><p>{l.pull}</p></blockquote>
+          <figcaption>
+            <span><strong>{l.name}</strong> · {l.role}</span>
+            <a href={`/leadership/#${l.id}`} class="link">Read the full message <Icon name="arrow" /></a>
+          </figcaption>
+        </figure>
+      ))}
+    </div>
+  </div>
+</section>
+<style>
+  .voices { overflow: hidden; }
+  .voices :global(.voices__deco) { position: absolute; right: -140px; top: -120px; color: rgb(255 255 255 / 0.04); --petal-centre: rgb(255 255 255 / 0.04); pointer-events: none; }
+  .voices__grid { position: relative; display: grid; gap: 3rem; align-items: center; }
+  @media (min-width: 960px) { .voices__grid { grid-template-columns: 0.9fr 1.1fr; gap: 5rem; } }
+  .voices__side { display: grid; gap: 1.5rem; }
+  .voices__side h2 { font-size: clamp(2.1rem, 1.4rem + 2.6vw, 3.6rem); }
+  .voices__tabs { display: grid; gap: 0.6rem; margin-top: 1rem; }
+  .vtab { display: flex; align-items: center; gap: 1rem; padding: 0.6rem; padding-right: 1.25rem; border-radius: var(--r-pill); text-align: left; background: rgb(255 255 255 / 0.06); transition: background 0.3s, transform 0.4s var(--ease-out); min-height: 60px; }
+  .vtab:hover { background: rgb(255 255 255 / 0.12); transform: translateX(4px); }
+  .vtab[aria-selected='true'] { background: var(--paper); color: var(--ink); }
+  .vtab :global(.vtab__img) { width: 52px; height: 52px; border-radius: 50%; object-fit: cover; flex: none; }
+  .vtab :global(picture) { display: contents; }
+  .vtab__text { display: grid; line-height: 1.25; }
+  .vtab__text strong { font-weight: 700; }
+  .vtab__text small { font-size: var(--t-xs); opacity: 0.7; }
+  .vpanel { display: grid; gap: 1.75rem; }
+  .vpanel:focus-visible { outline-offset: 12px; }
+  .vpanel__mark { width: 64px; color: var(--sun); }
+  .vpanel blockquote p { font-family: var(--f-display); font-size: clamp(2rem, 1.3rem + 2.8vw, 3.8rem); line-height: 1.08; letter-spacing: -0.025em; font-weight: 400; font-style: italic; }
+  .vpanel figcaption { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; padding-top: 1.5rem; border-top: 1px solid rgb(255 255 255 / 0.18); color: rgb(255 253 249 / 0.8); }
+  .vpanel figcaption strong { color: var(--white); }
+  :global(.vpanel.tab-in) { animation: panel-in 0.7s var(--ease-out) both; }
+  @keyframes panel-in { from { opacity: 0; transform: translateY(18px); filter: blur(6px); } }
+</style>

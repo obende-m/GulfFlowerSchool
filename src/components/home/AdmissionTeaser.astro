@@ -1,0 +1,45 @@
+---
+import AdmissionRoutes from '../AdmissionRoutes.astro';
+import Button from '../Button.astro';
+import Photo from '../Photo.astro';
+import Icon from '../Icon.astro';
+import { photos } from '@/data/photos';
+import { phones, formatPhone, telHref, site } from '@/data/site';
+---
+<section class="section section--white adm" aria-labelledby="adm-title">
+  <div class="wrap adm__grid">
+    <div>
+      <div class="sh">
+        <span class="eyebrow">How admission works</span>
+        <h2 id="adm-title" data-split>Joining Gulf Flower, <em class="accent--brick">step by step</em></h2>
+      </div>
+      <AdmissionRoutes idPrefix="home-route" />
+    </div>
+
+    <aside class="adm__card" data-reveal aria-label="Admission enquiry">
+      <Photo photo={photos.securityAssembly} shape="none" ratio="16/9" sizes="(min-width: 960px) 440px, 100vw" />
+      <div class="adm__card-body">
+        <p class="adm__tag"><span class="pulse-dot"></span>{site.admissionNotice}</p>
+        <h3 class="adm__card-title">Ready to apply?</h3>
+        <p>Send an admission enquiry and ask about the next placement test or entrance examination, fees and boarding.</p>
+        <Button href="/admissions/#enquire" variant="sun">Start an enquiry</Button>
+        <a href={telHref(phones[0])} class="adm__call"><Icon name="phone" size={18} />Or call {formatPhone(phones[0])}</a>
+      </div>
+    </aside>
+  </div>
+</section>
+<style>
+  .adm__grid { display: grid; gap: 3rem; align-items: start; }
+  .adm__grid > * { min-width: 0; }
+  @media (min-width: 960px) { .adm__grid { grid-template-columns: 1.25fr 0.75fr; gap: 4.5rem; } }
+  .adm__card { border-radius: var(--r-xl); overflow: hidden; background: var(--sky); color: var(--white); box-shadow: var(--shadow-lg); }
+  @media (min-width: 960px) { .adm__card { position: sticky; top: calc(var(--header-h) + 2rem); } }
+  .adm__card-body { display: grid; gap: 1rem; justify-items: start; padding: clamp(1.5rem, 1rem + 2vw, 2.25rem); }
+  .adm__card-body p { color: rgb(255 253 249 / 0.85); }
+  .adm__card-title { font-size: clamp(2rem, 1.6rem + 1.4vw, 2.6rem); }
+  .adm__tag { display: inline-flex; align-items: center; gap: 0.55rem; padding: 0.35rem 0.85rem; border-radius: var(--r-pill); background: rgb(255 255 255 / 0.14); font-size: var(--t-xs); font-weight: 700; }
+  .pulse-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--sun); animation: pulse 2.2s infinite; }
+  .adm__call { display: inline-flex; align-items: center; gap: 0.5rem; min-height: 44px; font-weight: 650; color: var(--sun); }
+  .adm__call:hover { text-decoration: underline; text-underline-offset: 4px; }
+  @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgb(242 178 58 / 0.6); } 70% { box-shadow: 0 0 0 9px rgb(242 178 58 / 0); } 100% { box-shadow: 0 0 0 0 rgb(242 178 58 / 0); } }
+</style>

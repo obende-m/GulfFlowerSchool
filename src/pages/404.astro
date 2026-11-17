@@ -1,0 +1,27 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Button from '@/components/Button.astro';
+import Petal from '@/components/Petal.astro';
+---
+<BaseLayout title="Page not found" description="The page you were looking for could not be found." noindex>
+  <section class="nf" data-hero>
+    <div class="wrap nf__inner">
+      <Petal size={140} class="nf__petal" data-hero-pop />
+      <p class="eyebrow" data-hero-item>Error 404</p>
+      <h1 data-split>This page hasn’t <em class="accent--wine">bloomed</em> yet.</h1>
+      <p class="lede" data-hero-item>The page you were looking for may have moved. Try one of these instead.</p>
+      <div class="btn-row" data-hero-item>
+        <Button href="/">Go to the homepage</Button>
+        <Button href="/admissions/" variant="ghost">Admissions</Button>
+        <Button href="/contact/" variant="ghost">Contact the school</Button>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+<style>
+  .nf { padding-block: clamp(5rem, 3rem + 8vw, 10rem); }
+  .nf__inner { display: grid; gap: 1.5rem; justify-items: center; text-align: center; }
+  .nf__inner .lede { margin-inline: auto; }
+  .nf__inner .btn-row { justify-content: center; }
+  .nf :global(.nf__petal) { color: var(--sun); --petal-centre: var(--wine); }
+</style>

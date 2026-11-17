@@ -1,0 +1,96 @@
+---
+import { entranceSubjects } from '@/data/content';
+/** The three admission routes published on admission.html and admissionpre.html. */
+interface Props { idPrefix?: string }
+const { idPrefix = 'route' } = Astro.props;
+const routes = [
+  {
+    id: 'primary',
+    tab: 'Nursery & Primary',
+    sub: 'Pre-age to Basic 6',
+    steps: [
+      { t: 'Send an enquiry', d: 'Tell us your child’s age and the class you are interested in, online or by phone.' },
+      { t: 'Placement test', d: 'Your child sits a placement test for the desired class. All tests are conducted in English, so pupils need an adequate knowledge of the language.' },
+      { t: 'Admission', d: 'Your child is admitted into the class that suits their age and the test result.' },
+    ],
+  },
+  {
+    id: 'jss1',
+    tab: 'Entry into JSS1',
+    sub: 'Gulf Flower High School',
+    steps: [
+      { t: 'Send an enquiry', d: 'Register your interest online or by phone to hear about the next entrance examination.' },
+      { t: 'Entrance examination', d: `Questions come from the primary school scheme of work: ${entranceSubjects.join(', ').replace(/, ([^,]*)$/, ' and $1')}.` },
+      { t: 'Interview', d: 'Successful candidates are invited for an interview.' },
+      { t: 'Admission', d: 'Successful candidates are admitted into JSS1, as day students or boarders.' },
+    ],
+  },
+  {
+    id: 'other',
+    tab: 'Other secondary classes',
+    sub: 'JSS2 – SS3',
+    steps: [
+      { t: 'Send an enquiry', d: 'Tell us which class your child is moving into.' },
+      { t: 'Screening test', d: 'Admission is offered into all other Junior and Senior Secondary classes after a screening test.' },
+      { t: 'Admission', d: 'Your child joins their new class at Gulf Flower High School.' },
+    ],
+  },
+];
+---
+<div class="routes" data-tabs>
+  <div class="routes__tabs" role="tablist" aria-label="Admission routes">
+    <span class="routes__indicator" data-tab-indicator aria-hidden="true"></span>
+    {routes.map((r, i) => (
+      <button type="button" role="tab" class="rtab" id={`${idPrefix}-tab-${r.id}`} aria-controls={`${idPrefix}-panel-${r.id}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1}>
+        <strong>{r.tab}</strong><small>{r.sub}</small>
+      </button>
+    ))}
+  </div>
+  {routes.map((r, i) => (
+    <div role="tabpanel" id={`${idPrefix}-panel-${r.id}`} aria-labelledby={`${idPrefix}-tab-${r.id}`} hidden={i !== 0} class="rpanel" tabindex="0">
+      <ol role="list" class="steps">
+        {r.steps.map((s, j) => (
+          <li class="step">
+            <span class="step__n">{j + 1}</span>
+            <div>
+              <h3 class="step__t">{s.t}</h3>
+              <p class="step__d">{s.d}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  ))}
+</div>
+<style>
+  .routes { min-width: 0; max-width: 100%; }
+  .routes__tabs { position: relative; display: flex; gap: 0.25rem; padding: 0.35rem; border-radius: var(--r-pill); background: var(--paper-2); overflow-x: auto; scrollbar-width: none; margin-bottom: 2rem; }
+  .routes__indicator { position: absolute; left: 0; top: 0.35rem; bottom: 0.35rem; border-radius: var(--r-pill); background: var(--wine); box-shadow: var(--shadow-sm); transition: transform 0.5s var(--ease-out), width 0.5s var(--ease-out); }
+  .rtab { position: relative; z-index: 1; flex: 1 0 auto; display: grid; padding: 0.65rem 1.2rem; border-radius: var(--r-pill); text-align: center; line-height: 1.2; transition: color 0.3s; min-height: 52px; }
+  .rtab strong { font-size: 0.9375rem; }
+  .rtab small { font-size: 0.75rem; opacity: 0.7; }
+  .rtab[aria-selected='true'] { color: var(--white); }
+  .steps { display: grid; gap: 0; counter-reset: s; }
+  .step { position: relative; display: grid; grid-template-columns: auto 1fr; gap: 1.25rem; padding-bottom: 1.75rem; }
+  .step:not(:last-child)::before { content: ''; position: absolute; left: 23px; top: 50px; bottom: 4px; width: 2px; background: repeating-linear-gradient(var(--line-strong) 0 6px, transparent 6px 12px); }
+  .step__n { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 50%; background: var(--sun); font-family: var(--f-display); font-size: 1.4rem; font-weight: 600; }
+  .step:nth-child(2) .step__n { background: var(--leaf); color: var(--white); }
+  .step:nth-child(3) .step__n { background: var(--brick); color: var(--white); }
+  .step:nth-child(4) .step__n { background: var(--sky); color: var(--white); }
+  .step__t { font-family: var(--f-sans); font-size: 1.15rem; font-weight: 700; letter-spacing: -0.01em; padding-top: 0.6rem; }
+  .step__d { color: var(--ink-2); margin-top: 0.3rem; max-width: 56ch; }
+  :global(.rpanel.tab-in) .step { animation: step-in 0.6s var(--ease-out) both; }
+  :global(.rpanel.tab-in) .step:nth-child(2) { animation-delay: 0.07s; }
+  :global(.rpanel.tab-in) .step:nth-child(3) { animation-delay: 0.14s; }
+  :global(.rpanel.tab-in) .step:nth-child(4) { animation-delay: 0.21s; }
+  @keyframes step-in { from { opacity: 0; transform: translateX(-16px); } }
+  /* Phones: three equal segments that always fit the screen — no sideways scrolling. */
+  @media (max-width: 640px) {
+    .routes__tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.2rem; overflow: visible; border-radius: var(--r-lg); padding: 0.3rem; }
+    .routes__indicator { top: 0.3rem; bottom: 0.3rem; border-radius: calc(var(--r-lg) - 0.3rem); }
+    .rtab { min-width: 0; padding: 0.6rem 0.35rem; border-radius: calc(var(--r-lg) - 0.3rem); align-content: center; gap: 0.2rem; min-height: 64px; }
+    .rtab strong { font-size: 0.8125rem; line-height: 1.15; }
+    .rtab small { font-size: 0.6875rem; line-height: 1.2; }
+    .step { gap: 1rem; }
+  }
+</style>

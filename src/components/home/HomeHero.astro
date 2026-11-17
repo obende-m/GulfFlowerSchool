@@ -1,0 +1,135 @@
+---
+import Photo from '../Photo.astro';
+import Petal from '../Petal.astro';
+import Button from '../Button.astro';
+import Icon from '../Icon.astro';
+import { photos } from '@/data/photos';
+---
+<section class="hero" data-hero aria-labelledby="hero-title">
+  <div class="hero__bg" aria-hidden="true">
+    <div class="hero__blob" data-parallax="-0.1"></div>
+    <Petal size={64} class="hero__float hero__float--a" data-float />
+    <Petal size={34} class="hero__float hero__float--b" data-float />
+    <Petal size={22} class="hero__float hero__float--c" data-float />
+  </div>
+
+  <div class="wrap hero__grid">
+    <div class="hero__copy">
+      <p class="hero__chip" data-hero-item>
+        <Icon name="pin" size={16} /> Day &amp; Boarding · Oworonshoki, Lagos
+      </p>
+      <h1 id="hero-title" data-split>
+        Where young minds <em class="accent--wine">bloom,</em> from
+        <span class="scribble">cradle<svg viewBox="0 0 200 20" preserveAspectRatio="none" aria-hidden="true"><path d="M3 14 C 40 4, 90 4, 120 10 S 180 16, 197 6" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" pathLength="1" /></svg></span>
+        to SS3.
+      </h1>
+      <p class="lede" data-hero-item>
+        Since 1998, Gulf Flower Schools has taught children in Oworonshoki from pre-school and nursery through primary to senior secondary, with day and boarding places on two campuses.
+      </p>
+      <div class="btn-row" data-hero-item>
+        <Button href="/admissions/#enquire">Start an admission enquiry</Button>
+        <Button href="/schools/" variant="ghost">Explore our schools</Button>
+      </div>
+      <ul class="hero__proof" role="list" data-hero-item>
+        <li><span class="dot dot--leaf"></span>Nigerian curriculum with British elements</li>
+        <li><span class="dot dot--sun"></span>Montessori &amp; Jolly Phonics early years</li>
+        <li><span class="dot dot--wine"></span>Boarding at primary &amp; secondary</li>
+      </ul>
+    </div>
+
+    <div class="hero__art">
+      <div class="hero__main" data-depth="-14">
+        <div data-hero-img class="hero__clip hero__clip--main">
+          <Photo photo={photos.primaryCourtyard} shape="none" ratio="5/4" loading="eager" sizes="(min-width: 1000px) 560px, 92vw" position="62% 50%" />
+        </div>
+      </div>
+      <div class="hero__circle" data-depth="22">
+        <div data-hero-img class="hero__clip hero__clip--circle">
+          <Photo photo={photos.labPractical} shape="none" ratio="1" loading="eager" sizes="220px" position="55% 40%" />
+        </div>
+      </div>
+      <div class="hero__arch" data-depth="30">
+        <div data-hero-img class="hero__clip hero__clip--arch">
+          <Photo photo={photos.graduate4} shape="none" ratio="3/4" loading="eager" sizes="220px" />
+        </div>
+      </div>
+
+      <div class="hero__badge" data-hero-pop aria-hidden="true">
+        <svg viewBox="0 0 200 200" class="hero__badge-ring" data-spin>
+          <defs><path id="badge-circle" d="M100,100 m-74,0 a74,74 0 1,1 148,0 a74,74 0 1,1 -148,0" /></defs>
+          <text><textPath href="#badge-circle" startOffset="0">ADMISSION OPEN · DAY &amp; BOARDING · SINCE 1998 ·</textPath></text>
+        </svg>
+        <Petal size={58} class="hero__badge-petal" />
+      </div>
+
+      <div class="hero__card" data-hero-pop>
+        <span class="hero__card-num">2</span>
+        <span class="hero__card-text"><strong>campuses</strong> by Miyaki Junction, Oworonshoki</span>
+      </div>
+
+      <p class="hero__note hand" data-hero-pop aria-hidden="true">
+        since 1998!
+        <svg viewBox="0 0 80 50" width="64" height="40"><path d="M5 8 C 30 0, 60 10, 68 38 M58 30 l10 9 6-12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero { position: relative; overflow: hidden; padding-block: clamp(2.5rem, 1rem + 4vw, 5rem) clamp(3.5rem, 2rem + 4vw, 6rem); }
+  @media (min-width: 1000px) { .hero { min-height: calc(100svh - var(--header-h)); display: grid; align-items: center; } }
+  .hero__bg { position: absolute; inset: 0; pointer-events: none; }
+  .hero__blob { position: absolute; right: -12vw; top: -14vw; width: 62vw; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle at 40% 60%, var(--sun-soft), transparent 62%); }
+  .hero__float { position: absolute; }
+  .hero__float--a { left: 3%; bottom: 10%; color: var(--leaf); --petal-centre: var(--sun); opacity: 0.85; }
+  .hero__float--b { left: 44%; top: 12%; color: var(--brick); --petal-centre: var(--sun); }
+  .hero__float--c { right: 6%; bottom: 8%; color: var(--sky); --petal-centre: var(--sun); }
+  @media (max-width: 999px) { .hero__float--b, .hero__float--a { display: none; } }
+
+  .hero__grid { position: relative; display: grid; gap: clamp(3rem, 2rem + 3vw, 4rem); align-items: center; }
+  @media (min-width: 1000px) { .hero__grid { grid-template-columns: 1.05fr 0.95fr; } }
+
+  .hero__copy { display: grid; gap: 1.6rem; justify-items: start; }
+  .hero__chip { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem 0.5rem 0.8rem; border-radius: var(--r-pill); background: var(--white); box-shadow: inset 0 0 0 1px var(--line); font-size: var(--t-sm); font-weight: 650; color: var(--wine); }
+  .hero h1 { max-width: 11.5ch; }
+  .hero h1 em { padding-right: 0.06em; }
+  .hero .lede { max-width: 50ch; }
+  .hero__proof { display: flex; flex-wrap: wrap; gap: 0.6rem 1.4rem; font-size: var(--t-sm); font-weight: 600; color: var(--ink-2); padding-top: 0.5rem; }
+  .hero__proof li { display: inline-flex; align-items: center; gap: 0.5rem; }
+  .dot { width: 9px; height: 9px; border-radius: 50%; flex: none; }
+  .dot--leaf { background: var(--leaf); } .dot--sun { background: var(--sun); } .dot--wine { background: var(--wine); }
+
+  /* Composition */
+  .hero__art { position: relative; width: min(100%, 600px); justify-self: center; aspect-ratio: 1 / 0.98; }
+  .hero__main { position: absolute; left: 7%; top: 9%; width: 86%; }
+  .hero__clip { overflow: hidden; box-shadow: var(--shadow-lg); }
+  .hero__clip--main { border-radius: 56px 8px 56px 8px; }
+  .hero__circle { position: absolute; right: -2%; top: -1%; width: 34%; }
+  .hero__clip--circle { border-radius: 50%; border: 6px solid var(--paper); }
+  .hero__arch { position: absolute; left: -2%; bottom: -1%; width: 33%; }
+  .hero__clip--arch { border-radius: 999px 999px 18px 18px; border: 6px solid var(--paper); }
+
+  .hero__badge { position: absolute; right: 2%; bottom: 3%; width: 30%; aspect-ratio: 1; display: grid; place-items: center; border-radius: 50%; background: var(--wine); color: var(--white); box-shadow: var(--shadow-lg); }
+  .hero__badge-ring { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .hero__badge-ring text { font-family: var(--f-sans); font-size: 15.5px; font-weight: 700; letter-spacing: 3.2px; fill: currentColor; }
+  .hero__badge :global(.hero__badge-petal) { width: 34%; height: 34%; color: var(--sun); --petal-centre: var(--brick); }
+
+  .hero__card { position: absolute; left: 30%; bottom: 0; transform: translateY(40%); display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1.1rem 0.75rem 0.8rem; border-radius: var(--r-md); background: var(--white); box-shadow: var(--shadow-md); max-width: 280px; }
+  .hero__card-num { display: grid; place-items: center; width: 48px; height: 48px; flex: none; border-radius: 14px; background: var(--leaf); color: var(--white); font-family: var(--f-display); font-size: 1.8rem; }
+  .hero__card-text { font-size: var(--t-xs); line-height: 1.35; color: var(--ink-2); }
+  .hero__card-text strong { display: block; font-size: 0.95rem; color: var(--ink); }
+
+  .hero__note { position: absolute; left: 4%; top: -4%; display: flex; align-items: flex-end; gap: 0.2rem; color: var(--brick); transform: rotate(-6deg); }
+  .hero__note svg { margin-bottom: -1.2rem; }
+
+  @media (max-width: 999px) {
+    .hero__art { width: min(100%, 520px); margin-top: 1rem; }
+  }
+  @media (max-width: 560px) {
+    .hero h1 { max-width: none; }
+    .hero__art { aspect-ratio: 1 / 1.05; }
+    .hero__card { left: 26%; transform: translateY(55%); max-width: 230px; }
+    .hero__note { font-size: 1.3rem; top: -7%; }
+    .hero .btn-row :global(.btn) { width: 100%; }
+  }
+</style>

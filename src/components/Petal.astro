@@ -1,0 +1,12 @@
+---
+/** The Gulf Flower six-petal mark, used as a decorative motif. */
+interface Props { size?: number | string; class?: string; filled?: boolean; style?: string; [k: string]: unknown }
+const { size = 48, class: cls, filled = true, style, ...rest } = Astro.props;
+const petals = [0, 60, 120, 180, 240, 300];
+---
+<svg class={cls} style={style} width={size} height={size} viewBox="0 0 100 100" aria-hidden="true" focusable="false" {...rest}>
+  <g fill={filled ? 'currentColor' : 'none'} stroke={filled ? 'none' : 'currentColor'} stroke-width="2.5">
+    {petals.map((r) => <ellipse cx="50" cy="26" rx="14" ry="24" transform={`rotate(${r} 50 50)`} opacity={filled ? 0.92 : 1} />)}
+  </g>
+  {filled && <circle cx="50" cy="50" r="9" fill="var(--petal-centre, var(--wine))" />}
+</svg>

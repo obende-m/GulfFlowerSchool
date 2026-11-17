@@ -1,0 +1,42 @@
+---
+import Photo from '../Photo.astro';
+import Button from '../Button.astro';
+import { photos } from '@/data/photos';
+const grads = [photos.graduate1, photos.graduate2, photos.graduate3, photos.graduate4, photos.graduate5];
+---
+<section class="section grads" aria-labelledby="grads-title">
+  <div class="wrap">
+    <div class="sh sh--center">
+      <span class="eyebrow">Outstanding students</span>
+      <h2 id="grads-title" data-split>Celebrating our <em class="accent--wine">WASSCE</em> stars</h2>
+      <p class="lede" data-reveal>Our outstanding WASSCE students graduate in boater hats and Gulf Flower sashes. The best graduating student from SS3 is awarded a scholarship.</p>
+    </div>
+    <ul role="list" class="grads__row" data-fan>
+      {grads.map((g, i) => (
+        <li class="grad" style={`--i:${i}`}>
+          <Photo photo={g} shape="arch-sm" ratio="216/294" sizes="(min-width: 760px) 230px, 45vw" />
+        </li>
+      ))}
+    </ul>
+    <div class="center grads__cta" data-reveal>
+      <Button href="/schools/high-school/" variant="ghost">Discover the high school</Button>
+    </div>
+  </div>
+</section>
+<style>
+  .grads { background: linear-gradient(var(--paper), var(--paper-2)); overflow: hidden; }
+  .grads__row { display: grid; grid-template-columns: repeat(5, 1fr); gap: clamp(0.6rem, 1.5vw, 1.4rem); align-items: end; max-width: 1100px; margin-inline: auto; }
+  .grad { transition: transform 0.6s var(--ease-out); }
+  .grad:nth-child(odd) { margin-bottom: 2.5rem; }
+  .grad:nth-child(3) { margin-bottom: 4.5rem; }
+  .grad :global(.frame) { box-shadow: var(--shadow-md); border: 5px solid var(--white); }
+  .grad:hover { transform: translateY(-10px); }
+  .grad:hover :global(img) { transform: scale(1.04); }
+  .grads__cta { margin-top: 3.5rem; }
+  @media (max-width: 759px) {
+    .grads__row { grid-template-columns: repeat(6, 1fr); }
+    .grad { grid-column: span 2; margin: 0 !important; }
+    .grad:nth-child(4) { grid-column: 2 / span 2; }
+    .grad:nth-child(5) { grid-column: 4 / span 2; }
+  }
+</style>

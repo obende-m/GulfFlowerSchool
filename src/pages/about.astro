@@ -1,0 +1,205 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/PageHero.astro';
+import Photo from '@/components/Photo.astro';
+import Petal from '@/components/Petal.astro';
+import Button from '@/components/Button.astro';
+import Icon from '@/components/Icon.astro';
+import CloseCTA from '@/components/CloseCTA.astro';
+import { photos, people } from '@/data/photos';
+import { site, campuses } from '@/data/site';
+
+const ethos = [
+  { quote: 'Our ethos of humility, simplicity and modesty, instilled in our training culture, has produced balanced families with accomplished goals, at home and abroad.', who: 'Mr. Femi Famuwagun', role: 'High School Principal', tone: 'sun' },
+  { quote: 'We instil in our students the fear of God and respect for others, and groom them to be self-reliant, honest citizens who appreciate the dignity in labour.', who: 'Mr. Balogun Wasiu Olaolu', role: 'Vice Principal (Administration)', tone: 'leaf' },
+  { quote: 'We provide a broad and balanced education within a happy, stimulating and healthy environment. Our learners feel safe to develop creatively and academically.', who: 'Mrs. Omotayo Atode', role: 'Head Teacher, Primary School', tone: 'brick' },
+];
+const areas = ['academically', 'socially', 'creatively', 'mentally', 'psychologically', 'physically', 'spiritually', 'morally', 'intellectually'];
+---
+<BaseLayout
+  title="About Us — Our Story Since 1998"
+  description="Gulf Flower Schools has nurtured children in Oworonshoki, Kosofe LGA, Lagos since 1998. Read our story, vision, mission and ethos."
+  crumbs={[{ name: 'About', href: '/about/' }]}
+>
+  <PageHero
+    eyebrow="Our story"
+    title="Nurturing humanity through <em>sound education</em>"
+    lede="From 1998 and still counting, Gulf Flower Schools has grown into a one-stop centre for learners from pre-school to primary to high school, with day and boarding places in Oworonshoki, Lagos."
+    photo={photos.highSchoolArch}
+    photo2={photos.primaryMuralWall}
+    crumbs={[{ name: 'About', href: '/about/' }]}
+  />
+
+  <section class="section story" aria-labelledby="story-title">
+    <div class="wrap story__grid">
+      <div class="story__year" aria-hidden="true">
+        <span class="story__num" data-count="1998" data-from="1960" data-raw>1998</span>
+        <span class="hand story__hand">where it began</span>
+      </div>
+      <div class="story__copy">
+        <span class="eyebrow">Since 1998</span>
+        <h2 id="story-title" data-split>More than two decades of <em class="accent--wine">transforming lives</em></h2>
+        <div class="prose stack" data-reveal>
+          <p>Gulf Flower Schools began in 1998 in Oworonshoki, in Lagos State’s Kosofe Local Government Area. In the Director’s words, the school has spent more than two decades “transforming lives in the total development of children”.</p>
+          <p>Today the school is a one-stop centre for learners from pre-school and nursery through primary to high school, both day and boarding. Gulf Flower One is home to the nursery and primary school; Gulf Flower Two is Gulf Flower High School, a co-educational secondary school.</p>
+          <p>The school describes itself as the only boarding school in Oworonshoki, with annexes within the State, and is ranked among the best schools in Lagos State, within Kosofe LGA.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="whole" aria-labelledby="whole-title" data-word-section>
+    <div class="wrap">
+      <span class="eyebrow">The whole child</span>
+      <h2 id="whole-title" class="sr-only">Developing the whole child</h2>
+      <p class="whole__text" data-word-scrub>
+        We develop children {areas.slice(0, -1).join(', ')} and {areas[areas.length - 1]} — from cradle to adulthood.
+      </p>
+      <p class="whole__cite" data-reveal>— adapted from the Director’s message</p>
+    </div>
+  </section>
+
+  <section class="section vm2" aria-labelledby="vm-title">
+    <div class="wrap">
+      <h2 id="vm-title" class="sr-only">Vision and mission</h2>
+      <div class="vm2__grid">
+        <article class="vm2__card vm2__card--vision" data-reveal>
+          <Petal size={64} class="vm2__petal" />
+          <h3 class="vm2__label">Our vision</h3>
+          <p class="vm2__text">{site.vision}</p>
+        </article>
+        <article class="vm2__card vm2__card--mission" data-reveal>
+          <Petal size={64} class="vm2__petal" />
+          <h3 class="vm2__label">Our mission</h3>
+          <p class="vm2__text">{site.mission}</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--paper2 ethos" aria-labelledby="ethos-title">
+    <div class="wrap">
+      <div class="sh sh--split">
+        <div class="stack">
+          <span class="eyebrow">Our ethos</span>
+          <h2 id="ethos-title" data-split>Values our leaders <em class="accent--leaf">live by</em></h2>
+        </div>
+        <p class="lede" data-reveal>Our leadership team describes the values that shape a Gulf Flower education in their own words.</p>
+      </div>
+      <div class="ethos__grid" data-stagger>
+        {ethos.map((e) => (
+          <figure class={`ethos__card ethos__card--${e.tone}`}>
+            <svg class="ethos__mark" viewBox="0 0 64 48" aria-hidden="true"><path d="M0 48V28C0 12 8 3 24 0l3 6C17 9 13 15 13 23h11v25zm37 0V28C37 12 45 3 61 0l3 6c-10 3-14 9-14 17h11v25z" fill="currentColor"/></svg>
+            <blockquote><p>{e.quote}</p></blockquote>
+            <figcaption><strong>{e.who}</strong><span>{e.role}</span></figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section curriculum" aria-labelledby="cur-title">
+    <div class="wrap cur__grid">
+      <div class="cur__art">
+        <Photo photo={photos.labTitration} shape="leaf" ratio="4/3" sizes="(min-width: 900px) 520px, 90vw" reveal parallax={1} />
+        <Photo photo={photos.primaryCourtyardSlide} shape="circle" ratio="1" class="cur__small" sizes="200px" reveal />
+      </div>
+      <div class="stack-lg">
+        <div class="stack">
+          <span class="eyebrow">Curriculum</span>
+          <h2 id="cur-title" data-split>A Nigerian curriculum, <em class="accent--brick">enriched</em></h2>
+        </div>
+        <ul role="list" class="cur__list" data-stagger>
+          <li><span class="cur__icon"><Icon name="book" size={22} /></span><div><h3 class="h4">Federal Ministry of Education</h3><p>We use the curriculum recommended by the Ministry of Education as our foundation.</p></div></li>
+          <li><span class="cur__icon"><Icon name="grad" size={22} /></span><div><h3 class="h4">British curriculum elements</h3><p>We embrace formative elements from the British curriculum for a wholesome result.</p></div></li>
+          <li><span class="cur__icon"><Icon name="sun" size={22} /></span><div><h3 class="h4">Montessori &amp; Jolly Phonics</h3><p>In the nursery and primary school, Jolly Phonics and Montessori packages complement the Federal curriculum.</p></div></li>
+        </ul>
+        <div class="btn-row">
+          <Button href="/schools/">Explore our schools</Button>
+          <Button href="/leadership/" variant="ghost">Meet our leadership</Button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--white campuses" aria-labelledby="camp-title">
+    <div class="wrap">
+      <div class="sh">
+        <span class="eyebrow">Where to find us</span>
+        <h2 id="camp-title" data-split>Two campuses by <em class="accent--wine">Miyaki Junction</em></h2>
+      </div>
+      <div class="camp__grid" data-stagger>
+        {campuses.map((c, i) => (
+          <a href={c.href} class="camp card">
+            <Photo photo={i === 0 ? photos.primaryCourtyard : photos.highSchoolCampus} shape="none" ratio="16/9" sizes="(min-width: 900px) 600px, 100vw" />
+            <div class="camp__body">
+              <p class="camp__name">{c.name}</p>
+              <h3 class="h3">{c.school}</h3>
+              <p class="camp__addr"><Icon name="pin" size={16} />{c.street}, {c.area}</p>
+              <span class="link">Visit the {i === 0 ? 'nursery & primary' : 'high'} school page <Icon name="arrow" /></span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CloseCTA />
+</BaseLayout>
+
+<style>
+  .story__grid { display: grid; gap: 2.5rem; align-items: center; }
+  @media (min-width: 900px) { .story__grid { grid-template-columns: 0.8fr 1.2fr; gap: 5rem; } }
+  .story__year { position: relative; display: grid; justify-items: start; }
+  .story__num { font-family: var(--f-display); font-size: clamp(6rem, 3rem + 12vw, 13rem); line-height: 0.85; letter-spacing: -0.06em; color: var(--wine); font-variant-numeric: tabular-nums; }
+  .story__hand { color: var(--brick); font-size: 2rem; transform: rotate(-4deg); margin-left: 1rem; }
+  .story__copy { display: grid; gap: 1.5rem; }
+
+  .whole { padding-block: clamp(5rem, 3rem + 8vw, 10rem); background: var(--ink); color: var(--white); }
+  .whole .eyebrow { color: var(--sun); margin-bottom: 2rem; }
+  .whole__text { font-family: var(--f-display); font-size: clamp(2.1rem, 1.2rem + 3.8vw, 5rem); line-height: 1.08; letter-spacing: -0.03em; max-width: 22ch; }
+  .whole__hl, .whole__word { font-style: italic; }
+  .whole__cite { margin-top: 2rem; color: rgb(255 253 249 / 0.6); font-size: var(--t-sm); }
+  :global(.js-anim) .whole__text :global(.w) { opacity: 0.18; }
+  .whole__text :global(.w.on) { opacity: 1; }
+
+  .vm2__grid { display: grid; gap: 1.25rem; }
+  @media (min-width: 860px) { .vm2__grid { grid-template-columns: 1fr 1fr; } }
+  .vm2__card { position: relative; overflow: hidden; display: grid; gap: 1rem; align-content: start; padding: clamp(2rem, 1.5rem + 2vw, 3.5rem); border-radius: var(--r-xl); min-height: 320px; }
+  .vm2__card--vision { background: var(--leaf); color: var(--white); }
+  .vm2__card--mission { background: var(--sun); color: var(--ink); }
+  .vm2__card :global(.vm2__petal) { color: rgb(255 255 255 / 0.9); --petal-centre: var(--brick); transition: transform 1s var(--ease-out); }
+  .vm2__card:hover :global(.vm2__petal) { transform: rotate(120deg) scale(1.1); }
+  .vm2__label { font-family: var(--f-sans); font-size: var(--t-xs); font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; }
+  .vm2__text { font-family: var(--f-display); font-size: clamp(1.9rem, 1.3rem + 2vw, 3rem); line-height: 1.08; letter-spacing: -0.02em; }
+
+  .ethos__grid { display: grid; gap: 1.25rem; }
+  @media (min-width: 900px) { .ethos__grid { grid-template-columns: repeat(3, 1fr); } .ethos__card:nth-child(2) { transform: translateY(2.5rem); } }
+  .ethos__card { display: flex; flex-direction: column; gap: 1.25rem; padding: 2rem; border-radius: var(--r-lg); background: var(--white); box-shadow: inset 0 0 0 1px var(--line); transition: box-shadow 0.4s, translate 0.5s var(--ease-out); }
+  .ethos__card:hover { translate: 0 -4px; box-shadow: inset 0 0 0 1px var(--line), var(--shadow-md); }
+  .ethos__mark { width: 44px; }
+  .ethos__card--sun .ethos__mark { color: var(--sun); }
+  .ethos__card--leaf .ethos__mark { color: var(--leaf); }
+  .ethos__card--brick .ethos__mark { color: var(--brick); }
+  .ethos__card blockquote p { font-family: var(--f-display); font-size: 1.35rem; line-height: 1.3; }
+  .ethos__card figcaption { margin-top: auto; display: grid; padding-top: 1rem; border-top: 1px solid var(--line); font-size: var(--t-sm); }
+  .ethos__card figcaption span { color: var(--ink-3); }
+
+  .cur__grid { display: grid; gap: 3.5rem; align-items: center; }
+  @media (min-width: 900px) { .cur__grid { grid-template-columns: 1fr 1fr; gap: 5rem; } }
+  .cur__art { position: relative; padding-bottom: 10%; }
+  .cur__art :global(.cur__small) { position: absolute; width: 36%; right: -4%; bottom: 0; border: 6px solid var(--paper); }
+  .cur__list { display: grid; gap: 1.25rem; }
+  .cur__list li { display: grid; grid-template-columns: auto 1fr; gap: 1rem; }
+  .cur__list p { color: var(--ink-2); margin-top: 0.25rem; }
+  .cur__icon { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 14px; background: var(--brick-soft); color: var(--brick); }
+
+  .camp__grid { display: grid; gap: 1.25rem; }
+  @media (min-width: 860px) { .camp__grid { grid-template-columns: 1fr 1fr; } }
+  .camp { overflow: hidden; }
+  .camp :global(.frame) { border-radius: 0; }
+  .camp__body { display: grid; gap: 0.6rem; padding: 1.75rem; justify-items: start; }
+  .camp__name { font-size: var(--t-xs); font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--brick); }
+  .camp__addr { display: flex; gap: 0.5rem; align-items: flex-start; color: var(--ink-2); }
+  .camp__addr :global(svg) { margin-top: 4px; flex: none; }
+</style>

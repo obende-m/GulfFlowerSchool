@@ -1,0 +1,94 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/PageHero.astro';
+import Photo from '@/components/Photo.astro';
+import Petal from '@/components/Petal.astro';
+import CloseCTA from '@/components/CloseCTA.astro';
+import { leaders } from '@/data/content';
+const [director, ...team] = leaders;
+---
+<BaseLayout
+  title="Leadership — Messages from Our Director and Team"
+  description="Messages from Dr. Cynthia Gregg, Director of Gulf Flower Schools, and the leaders of Gulf Flower High School and the primary school."
+  crumbs={[{ name: 'About', href: '/about/' }, { name: 'Leadership', href: '/leadership/' }]}
+>
+  <PageHero
+    eyebrow="Leadership"
+    title="The people who <em>lead</em> Gulf Flower"
+    lede="A warm welcome from our Director, Principal, Head Teacher and Vice Principal — in their own words."
+    tone="wine"
+    crumbs={[{ name: 'About', href: '/about/' }, { name: 'Leadership', href: '/leadership/' }]}
+  >
+    <ul role="list" class="jump" data-hero-item>
+      {leaders.map((l) => <li><a href={`#${l.id}`}>{l.name}</a></li>)}
+    </ul>
+  </PageHero>
+
+  <article class="section director" id="director" aria-labelledby="director-title">
+    <div class="wrap director__grid">
+      <div class="director__portrait">
+        <Photo photo={director.portrait!} shape="arch" ratio="350/470" sizes="(min-width: 900px) 380px, 80vw" reveal parallax={1} />
+        <Petal size={110} class="director__petal" data-spin />
+      </div>
+      <div class="director__copy">
+        <span class="eyebrow">Director’s message</span>
+        <h2 id="director-title" data-split>{director.title}</h2>
+        <p class="director__pull" data-reveal>“{director.pull}”</p>
+        <div class="prose stack" data-reveal>
+          {director.message.map((p) => <p>{p}</p>)}
+        </div>
+        <p class="sig" data-reveal><span class="hand">{director.name}</span><small>{director.role}</small></p>
+      </div>
+    </div>
+  </article>
+
+  {team.map((l, i) => (
+    <article class:list={['section', 'leader', i % 2 === 0 ? 'section--white' : '', i % 2 === 1 && 'leader--flip']} id={l.id} aria-labelledby={`${l.id}-title`}>
+      <div class="wrap leader__grid">
+        <div class="leader__photo">
+          <Photo photo={l.photo} shape={i === 1 ? 'circle' : 'leaf'} ratio="1" sizes="(min-width: 900px) 340px, 70vw" reveal />
+          <p class="leader__name" data-reveal><strong>{l.name}</strong><span>{l.role}</span></p>
+        </div>
+        <div class="leader__copy">
+          <span class="eyebrow">{l.role}</span>
+          <h2 id={`${l.id}-title`} class="h3 leader__pull" data-split>“{l.pull}”</h2>
+          <div class="prose stack" data-reveal>
+            {l.message.map((p) => <p>{p}</p>)}
+          </div>
+        </div>
+      </div>
+    </article>
+  ))}
+
+  <CloseCTA />
+</BaseLayout>
+
+<style>
+  .jump { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; }
+  .jump a { display: inline-flex; align-items: center; min-height: 44px; padding: 0.5rem 1rem; border-radius: var(--r-pill); background: rgb(255 255 255 / 0.1); font-weight: 600; font-size: var(--t-sm); transition: background 0.3s, color 0.3s; }
+  .jump a:hover { background: var(--sun); color: var(--ink); }
+
+  .director__grid { display: grid; gap: 3.5rem; align-items: start; }
+  @media (min-width: 900px) { .director__grid { grid-template-columns: 0.75fr 1.25fr; gap: 5rem; } .director__portrait { position: sticky; top: calc(var(--header-h) + 2rem); } }
+  .director__portrait { position: relative; width: min(100%, 400px); justify-self: center; }
+  .director__portrait :global(.director__petal) { position: absolute; right: -30px; top: -30px; color: var(--sun); --petal-centre: var(--wine); }
+  @media (max-width: 600px) { .director__portrait :global(.director__petal) { right: 0; width: 80px; height: 80px; } }
+  .director__copy { display: grid; gap: 1.5rem; }
+  .director__pull { font-family: var(--f-display); font-style: italic; font-size: clamp(1.6rem, 1.2rem + 1.4vw, 2.3rem); line-height: 1.2; color: var(--wine); padding-left: 1.25rem; border-left: 3px solid var(--sun); }
+  .sig { display: grid; gap: 0.2rem; margin-top: 0.5rem; }
+  .sig .hand { font-size: 2.4rem; color: var(--wine); }
+  .sig small { color: var(--ink-3); font-weight: 600; }
+
+  .leader__grid { display: grid; gap: 3rem; align-items: center; }
+  @media (min-width: 900px) {
+    .leader__grid { grid-template-columns: 0.7fr 1.3fr; gap: 5rem; }
+    .leader--flip .leader__grid { grid-template-columns: 1.3fr 0.7fr; }
+    .leader--flip .leader__photo { order: 2; }
+  }
+  .leader__photo { position: relative; width: min(100%, 340px); justify-self: center; }
+  .leader__name { position: absolute; left: 50%; bottom: -1.25rem; translate: -50% 0; white-space: nowrap; display: grid; text-align: center; padding: 0.75rem 1.25rem; border-radius: var(--r-md); background: var(--white); box-shadow: var(--shadow-md); }
+  .leader__name strong { font-family: var(--f-display); font-size: 1.15rem; }
+  .leader__name span { font-size: var(--t-xs); color: var(--ink-3); font-weight: 600; }
+  .leader__copy { display: grid; gap: 1.5rem; }
+  .leader__pull { font-size: clamp(1.8rem, 1.3rem + 1.8vw, 2.8rem); font-style: italic; font-weight: 400; }
+</style>

@@ -1,0 +1,62 @@
+---
+import Photo from '../Photo.astro';
+import Petal from '../Petal.astro';
+import Icon from '../Icon.astro';
+import { leaders } from '@/data/content';
+import { site } from '@/data/site';
+const d = leaders[0];
+---
+<section class="section welcome" aria-labelledby="welcome-title">
+  <div class="wrap welcome__grid">
+    <div class="welcome__portrait">
+      <Photo photo={d.portrait!} shape="arch" ratio="350/470" sizes="(min-width: 900px) 340px, 70vw" reveal parallax={1} />
+      <Petal size={92} class="welcome__petal" data-spin />
+      <p class="welcome__sig" data-reveal>
+        <strong>{d.name}</strong>
+        <span>{d.role}</span>
+      </p>
+    </div>
+
+    <div class="welcome__copy">
+      <span class="eyebrow">A word from our Director</span>
+      <h2 id="welcome-title" class="welcome__quote" data-split>
+        “We are dedicated to building the totality of a child from <em class="accent--wine">cradle to adulthood</em>.”
+      </h2>
+      <p class="lede" data-reveal>
+        Gulf Flower Schools nurtures children academically, socially, creatively, morally and spiritually — a one-stop centre for learners from pre-school to high school, both day and boarding.
+      </p>
+      <a href="/leadership/#director" class="link" data-reveal>Read the Director’s full message <Icon name="arrow" /></a>
+
+      <div class="vm" data-stagger>
+        <article class="vm__card vm__card--vision">
+          <h3 class="vm__title">Our vision</h3>
+          <p>{site.vision}</p>
+        </article>
+        <article class="vm__card vm__card--mission">
+          <h3 class="vm__title">Our mission</h3>
+          <p>{site.mission}</p>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+<style>
+  .welcome__grid { display: grid; gap: clamp(3rem, 2rem + 4vw, 6rem); align-items: center; }
+  @media (min-width: 900px) { .welcome__grid { grid-template-columns: 0.8fr 1.2fr; } }
+  .welcome__portrait { position: relative; width: min(100%, 380px); justify-self: center; }
+  .welcome__portrait :global(.welcome__petal) { position: absolute; top: -28px; right: -24px; color: var(--sun); --petal-centre: var(--wine); }
+  .welcome__sig { position: absolute; left: -6%; bottom: 8%; display: grid; padding: 0.9rem 1.2rem; border-radius: var(--r-md); background: var(--white); box-shadow: var(--shadow-md); line-height: 1.3; }
+  .welcome__sig strong { font-family: var(--f-display); font-size: 1.25rem; font-weight: 600; }
+  .welcome__sig span { font-size: var(--t-xs); color: var(--ink-3); font-weight: 600; }
+  .welcome__copy { display: grid; gap: 1.5rem; justify-items: start; }
+  .welcome__quote { font-size: clamp(2rem, 1.3rem + 2.6vw, 3.6rem); line-height: 1.08; letter-spacing: -0.025em; font-weight: 450; }
+  .vm { display: grid; gap: 1rem; width: 100%; margin-top: 1rem; }
+  @media (min-width: 600px) { .vm { grid-template-columns: 1fr 1fr; } }
+  .vm__card { padding: 1.5rem; border-radius: var(--r-lg); display: grid; gap: 0.6rem; transition: transform 0.5s var(--ease-out); }
+  .vm__card:hover { transform: translateY(-4px); }
+  .vm__card p { font-family: var(--f-display); font-size: 1.35rem; line-height: 1.25; }
+  .vm__title { font-family: var(--f-sans); font-size: var(--t-xs); text-transform: uppercase; letter-spacing: 0.14em; font-weight: 700; }
+  .vm__card--vision { background: var(--leaf-soft); color: var(--leaf-deep); }
+  .vm__card--mission { background: var(--brick-soft); color: #7a2d14; }
+  @media (max-width: 560px) { .welcome__sig { left: 0; bottom: -1.5rem; } .welcome__portrait { margin-bottom: 1.5rem; } }
+</style>
